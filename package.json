@@ -2,6 +2,7 @@
   "name": "webapi",
   "version": "0.0.0",
   "private": true,
+  "main": "./bin/www",
   "scripts": {
     "start": "node ./bin/www"
   },
@@ -14,5 +15,8 @@
     "orm": "^4.0.1",
     "pug": "2.0.0-beta11",
     "serve-favicon": "~2.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
   }
 }
