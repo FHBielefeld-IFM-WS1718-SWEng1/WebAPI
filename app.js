@@ -1,16 +1,15 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
+var express = require('express');   // Die express komponente ermöglicht einfaches erstellen von Routen
+var logger = require('morgan');     // Logger für Requests
+var bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
 
-var parties = require('./routes/parties');
+var parties = require('./routes/parties');  // Das erste Routen Module
 
-var app = express();
+var app = express();                // erstellen einer Express Node.js Application
 
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-
+app.use(logger('dev'));                                 //  Einstellen des Loggers
+app.use(bodyParser.json());                             //
+app.use(bodyParser.urlencoded({extended: false}));      //
+// Hier werden die Routen eingetragen
 app.use('/parties', parties);
 
 
@@ -31,6 +30,7 @@ app.use(function (err, req, res, next) {
     res.json({"error": res.locals.message});
 });
 
+// erstellen eines HTTP servers der Auf Port 8080 hört
 var listener = app.listen(8080, function () {
     console.log('API listening on ' + listener.address().port);
 });
