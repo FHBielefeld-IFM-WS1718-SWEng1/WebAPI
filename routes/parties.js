@@ -6,10 +6,12 @@ var highestID = 0;
 /* POST parties listing. */
 router.post('/', function (req, res, next) {
     if ("name" in req.body && "age" in req.body && req.body.name && req.body.age) {
-        req.body.id = highestID;
-        highestID++;
-        temp.values.push(req.body);
-        res.json(req.body);
+        var entry = {};
+        entry.id = highestID++;
+        entry.name = req.body.name;
+        entry.description = req.body.description;
+        temp.values.push(entry);
+        res.json(entry);
     } else {
         res.json({error: 400, text: "Das übergebene Element ist für diesen Request ungültig!"});
     }
@@ -81,6 +83,5 @@ router.delete('/:id', function (req, res, next) {
         res.json({id: "missing", name: "get"});
     }
 });
-
 
 module.exports = router;
