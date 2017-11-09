@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var temp = {name: "test", values: []};
+var temp = {name: "Liste aller Partys.", values: []};
 var highestID = 0;
 
 /* POST parties listing. */
@@ -48,10 +48,15 @@ router.get('/', function (req, res, next) {
 router.put('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
         var id = req.params.id;
-        console.log(id);
-        if (temp.values.length < id) {
-            res.json(temp.values[id]);
-        } else {
+        var i;
+        var erfolg;
+        for (i = 0; i < temp.values.length; i++) {
+            if (temp.values[i].id == id) {
+                res.json(temp.values[id]);
+                erfolg = true;
+            }
+        }
+        if (!erfolg) {
             res.json({error: 404, name: "Keine Partie mit der id " + id});
         }
     } else {
