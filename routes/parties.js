@@ -32,9 +32,11 @@ router.get('/:id', function (req, res, next) {
             }
         }
         if (!erfolg) {
-            res.json({error: 404, name: "Keine Partie mit der id " + id});
+            res.status = 404
+            res.json({error: "Keine Partie mit der id " + id});
         }
     } else {
+        res.status(404);
         res.json({id: "missing", name: "get"});
     }
 });
@@ -61,7 +63,7 @@ router.put('/:id', function (req, res, next) {
                 if("invited" in req.body && req.body.invited ){
                     temp.values[i].invited = req.body.invited || [];
                 }
-                temp.values.push(entry);
+                res.status = 200
                 res.json(temp.values[i]);
                 erfolg = true;
             }
@@ -73,7 +75,7 @@ router.put('/:id', function (req, res, next) {
         res.json({id: "missing", name: "get"});
     }
 });
-;
+
 
 
 /* DELETE parties listing. */
