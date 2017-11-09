@@ -57,7 +57,7 @@ router.put('/:id', function (req, res, next) {
                 if("name" in req.body && req.body.name ){
                     temp.values[i].name = req.body.name;
                 }
-                if("dexcription" in req.body && req.body.description ){
+                if("description" in req.body && req.body.description ){
                     temp.values[i].description = req.body.description;
                 }
                 if("invited" in req.body && req.body.invited ){
