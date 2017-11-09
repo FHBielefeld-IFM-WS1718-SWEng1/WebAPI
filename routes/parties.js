@@ -35,7 +35,6 @@ router.get('/:id', function (req, res, next) {
             res.json({error: 404, name: "Keine Partie mit der id " + id});
         }
     } else {
-        console.log("never ever possible")
         res.json({id: "missing", name: "get"});
     }
 });
@@ -63,16 +62,14 @@ router.put('/:id', function (req, res, next) {
                     temp.values[i].invited = req.body.invited || [];
                 }
                 temp.values.push(entry);
-                res.json(temp.values[id]);
+                res.json(temp.values[i]);
                 erfolg = true;
             }
-
         }
         if (!erfolg) {
             res.json({error: 404, name: "Keine Partie mit der id " + id});
         }
     } else {
-        console.log("never ever possible")
         res.json({id: "missing", name: "get"});
     }
 });
@@ -83,7 +80,6 @@ router.put('/:id', function (req, res, next) {
 router.delete('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
         var id = req.params.id;
-        console.log(id);
         var i;
         var erfolg;
         for (i = 0; i < temp.values.length; i++) {
@@ -97,7 +93,6 @@ router.delete('/:id', function (req, res, next) {
             res.json({error: 404, name: "Keine Partie mit der id " + id});
         }
     } else {
-        console.log("never ever possible")
         res.json({id: "missing", name: "get"});
     }
 });
