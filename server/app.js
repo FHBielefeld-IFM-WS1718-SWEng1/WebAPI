@@ -2,6 +2,7 @@ var express = require('express');   // Die express komponente ermöglicht einfac
 var logger = require('morgan');     // Logger für Requests
 var bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
 
+// alle routen
 var parties = require('./routes/parties');  // Das erste Routen Module
 
 var app = express();                // erstellen einer Express Node.js Application
@@ -32,5 +33,9 @@ app.use(function (err, req, res, next) {
 
 // erstellen eines HTTP servers der Auf Port 8080 hört
 var listener = app.listen(8080, function () {
+
     console.log('API listening on ' + listener.address().port);
 });
+
+
+module.exports = listener;
