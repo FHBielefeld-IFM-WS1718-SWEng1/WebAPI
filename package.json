@@ -4,10 +4,10 @@
   "main": "./server/app",
   "private": true,
   "dependencies": {
-    "body-parser": "~1.18.2",
-    "debug": "~2.6.9",
-    "express": "~4.15.5",
-    "morgan": "~1.9.0",
+    "body-parser": "^1.18.2",
+    "debug": "^2.6.9",
+    "express": "^4.16.2",
+    "morgan": "^1.9.0",
     "orm": "^4.0.1"
   },
   "devDependencies": {
@@ -17,6 +17,8 @@
     "supertest": "^3.0.0"
   },
   "scripts": {
-    "test": "mocha --reporter min"
+    "test": "mocha --reporter min",
+    "dev": "nodemon",
+    "prd": "NODE_ENV=production && node ./server/app"
   }
 }
