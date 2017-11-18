@@ -10,3 +10,7 @@ install:
   - npm install
 script:
   - mocha
+branches:
+  only:
+  - master
+  - dev

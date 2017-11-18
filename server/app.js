@@ -1,5 +1,5 @@
 var express = require('express');   // Die express komponente ermöglicht einfaches erstellen von Routen
-var logger = require('morgan');     // Logger für Requests
+//var logger = require('morgan');     // Logger für Requests
 var bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
 
 // alle routen
@@ -7,7 +7,7 @@ var parties = require('./routes/parties');  // Das erste Routen Module
 
 var app = express();                // erstellen einer Express Node.js Application
 
-app.use(logger('dev'));                                 //  Einstellen des Loggers
+//app.use(logger('dev'));                                 //  Einstellen des Loggers
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
 // Hier werden die Routen eingetragen
