@@ -1,16 +1,31 @@
-var express = require('express');   // Die express komponente ermöglicht einfaches erstellen von Routen
+const express = require('express');   // Die express komponente ermöglicht einfaches erstellen von Routen
 //var logger = require('morgan');     // Logger für Requests
-var bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
+const bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
+const checkToken = require('./auth/authenticate');
 
-// alle routen
-var parties = require('./routes/parties');  // Das erste Routen Module
+// alle routen importieren
+const parties = require('./routes/parties');  // Das erste Routen Module
+const users = require('./routes/user');
 
-var app = express();                // erstellen einer Express Node.js Application
+const app = express();                // erstellen einer Express Node.js Application
 
 //app.use(logger('dev'));                                 //  Einstellen des Loggers
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
-// Hier werden die Routen eingetragen
+
+// Hier werden die Routen eingetragten die public sind
+
+app.use(function (req, res, next) {
+    if(req.query.api && checkToken(req.query.api)){
+        next();
+    }else{
+        var err = new Error('API Key ungültig');
+        err.status = 403;
+        next(err)
+
+    }
+});
+// Hier werden die Routen eingetragen die Login erfordern
 app.use('/parties', parties);
 
 
