@@ -9,13 +9,13 @@ const users = require('./routes/user');
 
 // Globale Variablen
 // Tempörär hier gehostet
-var config = require('./config.json');
+var config = require('../databaseconfig.json');
 
 const app = express();                // erstellen einer Express Node.js Application
 
 //app.use(logger('dev'));                                 //  Einstellen des Loggers
-app.use(orm.express(config.connectionString, { // erstellen der
-    define: function (db, models, next) {
+app.use(orm.express(config.connectionString, { // erstellen der Modelle der DB
+    define: function (db, models, next) {       // nächster schritt die Restrictions hinzufügen!!!
         models.user = db.define("User", {
             Userid: {type: "integer", unique: true},
             Name: {type: "text", size: 20},
@@ -35,16 +35,13 @@ app.use(orm.express(config.connectionString, { // erstellen der
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
 
-// ebenfalss tempörär bis entscheidung getroffen
-
-
 // Hier werden die Routen eingetragten die public sind
 app.use('/users', users);
 app.use(function (req, res, next) {
     if (req.query.api && checkToken(req.query.api)) {
         next();
     } else {
-        var err = new Error('API Key ungültig');
+        var err = new Error('API Key ungültig!');
         err.status = 403;
         next(err)
 

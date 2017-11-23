@@ -8,10 +8,13 @@ var temp = {name: "Liste aller User", values: []};
 // POST
 router.post('/', function (req, res, next) {
     if ("email" in req.body && "name" in req.body && "password" in req.body) {
+        var currentDate = new Date().toISOString().slice(0,19).replace('T',' ');
         req.models.user.create({
             name: req.body.name,
             password: req.body.password,
-            email: req.body.email
+            email: req.body.email,
+            CreatedAt: currentDate,
+            ChangedAt: currentDate
         }, function (err, results) {
             if (err) throw err;
             console.log(results);
