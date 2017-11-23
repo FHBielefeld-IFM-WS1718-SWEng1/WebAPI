@@ -14,7 +14,7 @@ router.post('/', function (req, res, next) {
         entry.description = req.body.description;
         temp.values.push(entry);
 
-        req.models.User.create({name: req.body.name, description: req.body.description}, function (err, results) {
+        req.models.user.create({name: req.body.name, description: req.body.description}, function (err, results) {
             if (err) throw err;
             console.log(results);
             if (!results) {
@@ -25,29 +25,28 @@ router.post('/', function (req, res, next) {
 
 
         // res.json(entry);
-    }
-    else {
+    } else {
         res.json({error: 400, text: "Das übergebene Element ist für diesen Request ungültig!"});
     }
 });
 
 /* GET user listing. */
 router.get('/:id', function (req, res, next) {
-    if ("id" in req.params && req.params.id) {
-        var id = req.params.id;
-        req.models.find({id: id}, function (err, people) {
-            if (err) throw err;
-            if (!people)
-                console.log("People found: %d", people.length);
-            console.log("First person: %s, age %d", people[0].fullName(), people[0].age);
+        if ("id" in req.params && req.params.id) {
+            var id = req.params.id;
+            req.models.user.find({id: id}, function (err, people) {
+                if (err) throw err;
+                if (!people)
+                    console.log("People found: %d", people.length);
+                console.log("First person: %s, age %d", people[0].fullName(), people[0].age);
 
-            if (!erfolg) {
-                res.status = 404
-                res.json({error: "Keine Partie mit der id " + id});
-            }
+                if (!erfolg) {
+                    res.status = 404
+                    res.json({error: "Keine Partie mit der id " + id});
+                }
+            });
         }
-    else
-        {
+        else {
             res.status(404);
             res.json({id: "missing", name: "get"});
         }

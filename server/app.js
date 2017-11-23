@@ -15,7 +15,7 @@ const app = express();                // erstellen einer Express Node.js Applica
 //app.use(logger('dev'));                                 //  Einstellen des Loggers
 app.use(orm.express(connectionString, { // erstellen der
     define: function (db, models, next) {
-        models.person = db.define("User", {
+        models.user = db.define("User", {
             Userid: {type: "integer", unique: true},
             Name: {type: "text", size: 20},
             Email: {type: "text", size: 50},
@@ -38,7 +38,7 @@ app.use(bodyParser.urlencoded({extended: false}));      //
 
 
 // Hier werden die Routen eingetragten die public sind
-app.use(users);
+app.use('/users', users);
 app.use(function (req, res, next) {
     if (req.query.api && checkToken(req.query.api)) {
         next();
