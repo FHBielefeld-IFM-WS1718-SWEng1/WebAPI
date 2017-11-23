@@ -3,18 +3,16 @@ const router = express.Router();
 
 // Tempörere Lösung anstelle von der Datenbank!
 var temp = {name: "Liste aller User", values: []};
-var highestID = 0;
+
 
 // POST
 router.post('/', function (req, res, next) {
-    if ("name" in req.body && "description" in req.body && req.body.name && req.body.description) {
-        var entry = {};
-        entry.id = highestID++;
-        entry.name = req.body.name;
-        entry.description = req.body.description;
-        temp.values.push(entry);
-
-        req.models.user.create({name: req.body.name, description: req.body.description}, function (err, results) {
+    if ("email" in req.body && "name" in req.body && "password" in req.body) {
+        req.models.user.create({
+            name: req.body.name,
+            password: req.body.password,
+            email: req.body.email
+        }, function (err, results) {
             if (err) throw err;
             console.log(results);
             if (!results) {
@@ -34,7 +32,7 @@ router.post('/', function (req, res, next) {
 router.get('/:id', function (req, res, next) {
         if ("id" in req.params && req.params.id) {
             var id = req.params.id;
-            req.models.user.find({id: id}, function (err, people) {
+            req.models.user.find({id: id, DeletedAt: null}, function (err, people) {
                 if (err) throw err;
                 if (!people)
                     console.log("People found: %d", people.length);

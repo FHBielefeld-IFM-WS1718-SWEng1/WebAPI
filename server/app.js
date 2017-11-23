@@ -9,11 +9,12 @@ const users = require('./routes/user');
 
 // Globale Variablen
 // Tempörär hier gehostet
+var config = require('./config.json');
 
 const app = express();                // erstellen einer Express Node.js Application
 
 //app.use(logger('dev'));                                 //  Einstellen des Loggers
-app.use(orm.express(connectionString, { // erstellen der
+app.use(orm.express(config.connectionString, { // erstellen der
     define: function (db, models, next) {
         models.user = db.define("User", {
             Userid: {type: "integer", unique: true},
