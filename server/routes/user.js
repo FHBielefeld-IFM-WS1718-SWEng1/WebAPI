@@ -8,16 +8,15 @@ var temp = {name: "Liste aller User", values: []};
 // POST
 router.post('/', function (req, res, next) {
     if ("email" in req.body && "name" in req.body && "password" in req.body) {
-        var currentDate = new Date().toISOString().slice(0,19).replace('T',' ');
+        var currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
         req.models.user.create({
-            name: req.body.name,
-            password: req.body.password,
-            email: req.body.email,
+            Name: req.body.name,
+            Password: req.body.password,
+            Email: req.body.email,
             CreatedAt: currentDate,
             ChangedAt: currentDate
         }, function (err, results) {
             if (err) throw err;
-            console.log(results);
             if (!results) {
                 res.json(results);
                 res.code = 201;
@@ -35,19 +34,16 @@ router.post('/', function (req, res, next) {
 router.get('/:id', function (req, res, next) {
         if ("id" in req.params && req.params.id) {
             var id = req.params.id;
-            req.models.user.find({id: id, DeletedAt: null}, function (err, people) {
+            req.models.user.find({Userid: id, DeletedAt: null}, function (err, user) {
                 if (err) throw err;
-                if (!people)
-                    console.log("People found: %d", people.length);
-                console.log("First person: %s, age %d", people[0].fullName(), people[0].age);
-
-                if (!erfolg) {
-                    res.status = 404
-                    res.json({error: "Keine Partie mit der id " + id});
+                if (user && user.length > 0 && user[0]) {
+                    res.json(user[0]);
+                    return;
                 }
             });
-        }
-        else {
+            throw {message: "", error: "UseLess"};
+            
+        } else {
             res.status(404);
             res.json({id: "missing", name: "get"});
         }

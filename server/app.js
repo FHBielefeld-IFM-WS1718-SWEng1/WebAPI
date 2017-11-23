@@ -16,17 +16,17 @@ const app = express();                // erstellen einer Express Node.js Applica
 //app.use(logger('dev'));                                 //  Einstellen des Loggers
 app.use(orm.express(config.connectionString, { // erstellen der Modelle der DB
     define: function (db, models, next) {       // nächster schritt die Restrictions hinzufügen!!!
+        db.settings.set("properties.primary_key", "UserID");
         models.user = db.define("User", {
-            Userid: {type: "integer", unique: true},
-            Name: {type: "text", size: 20},
-            Email: {type: "text", size: 50},
-            Password: {type: "text", size: 50},
+            Name: {type: "text", size: 20, required: true},
+            Email: {type: "text", size: 50, required: true},
+            Password: {type: "text", size: 50, required: true},
             Birthdate: {type: "text", size: 5},
             Gender: {type: "text", size: 50},
             Address: {type: "text", size: 50},
             Profilepicture: {type: "text", size: 100},
-            CreatedAt: {type: "date", time: true},
-            ChangedAt: {type: "date", time: true},
+            CreatedAt: {type: "date", time: true, required: true},
+            ChangedAt: {type: "date", time: true, required: true},
             DeletedAt: {type: "date", time: true}
         });
         next();
