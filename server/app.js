@@ -2,23 +2,47 @@ const express = require('express');   // Die express komponente ermöglicht einf
 //var logger = require('morgan');     // Logger für Requests
 const bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
 const checkToken = require('./auth/authenticate');
-
+const orm = require("orm");
 // alle routen importieren
 const parties = require('./routes/parties');  // Das erste Routen Module
 const users = require('./routes/user');
 
+// Globale Variablen
+// Tempörär hier gehostet
+
 const app = express();                // erstellen einer Express Node.js Application
 
 //app.use(logger('dev'));                                 //  Einstellen des Loggers
+app.use(orm.express(connectionString, { // erstellen der
+    define: function (db, models, next) {
+        models.person = db.define("User", {
+            Userid: {type: "integer", unique: true},
+            Name: {type: "text", size: 20},
+            Email: {type: "text", size: 50},
+            Password: {type: "text", size: 50},
+            Birthdate: {type: "text", size: 5},
+            Gender: {type: "text", size: 50},
+            Address: {type: "text", size: 50},
+            Profilepicture: {type: "text", size: 100},
+            CreatedAt: {type: "date", time: true},
+            ChangedAt: {type: "date", time: true},
+            DeletedAt: {type: "date", time: true}
+        });
+        next();
+    }
+}));
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
 
-// Hier werden die Routen eingetragten die public sind
+// ebenfalss tempörär bis entscheidung getroffen
 
+
+// Hier werden die Routen eingetragten die public sind
+app.use(users);
 app.use(function (req, res, next) {
-    if(req.query.api && checkToken(req.query.api)){
+    if (req.query.api && checkToken(req.query.api)) {
         next();
-    }else{
+    } else {
         var err = new Error('API Key ungültig');
         err.status = 403;
         next(err)
