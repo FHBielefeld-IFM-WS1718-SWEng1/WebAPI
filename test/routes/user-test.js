@@ -3,7 +3,7 @@ describe('user', function () {
         request(server)
             .get('/users')
             .expect('Content-Type', /json/)
-            .expect(421, done)
+            .expect(401, done)
     });
     it('should list a SINGLE blob on /parties/<id> GET', function (done) {
         request(server)

@@ -1,16 +1,53 @@
-var express = require('express');   // Die express komponente ermöglicht einfaches erstellen von Routen
+const express = require('express');   // Die express komponente ermöglicht einfaches erstellen von Routen
 //var logger = require('morgan');     // Logger für Requests
-var bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
+const bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
+const checkToken = require('./auth/authenticate');
+const orm = require("orm");
+// alle routen importieren
+const parties = require('./routes/parties');  // Das erste Routen Module
+const users = require('./routes/user');
 
-// alle routen
-var parties = require('./routes/parties');  // Das erste Routen Module
+// Globale Variablen
+// Tempörär hier gehostet
+var config = require('../databaseconfig.json');
 
-var app = express();                // erstellen einer Express Node.js Application
+const app = express();                // erstellen einer Express Node.js Application
 
 //app.use(logger('dev'));                                 //  Einstellen des Loggers
+app.use(orm.express(config.connectionString, { // erstellen der Modelle der DB
+    define: function (db, models, next) {       // nächster schritt die Restrictions hinzufügen!!!
+        db.settings.set("properties.primary_key", "UserID");
+        models.user = db.define("User", {
+            Name: {type: "text", size: 20, required: true},
+            Email: {type: "text", size: 50, required: true},
+            Password: {type: "text", size: 50, required: true},
+            Birthdate: {type: "text", size: 5},
+            Gender: {type: "text", size: 50},
+            Address: {type: "text", size: 50},
+            Profilepicture: {type: "text", size: 100},
+            CreatedAt: {type: "date", time: true, required: true},
+            ChangedAt: {type: "date", time: true, required: true},
+            DeletedAt: {type: "date", time: true}
+        });
+        next();
+    }
+}));
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
-// Hier werden die Routen eingetragen
+
+// Hier werden die Routen eingetragten die public sind
+app.use('/users', users);
+app.use(function (req, res, next) {
+    if (req.query.api && checkToken(req.query.api)) {
+        next();
+    } else {
+        var err = new Error('API Key ungültig!');
+        err.status = 403;
+        next(err)
+
+    }
+});
+// Hier werden die Routen eingetragen die Login erfordern
 app.use('/parties', parties);
 
 

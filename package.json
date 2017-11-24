@@ -8,11 +8,13 @@
     "debug": "^2.6.9",
     "express": "^4.16.2",
     "morgan": "^1.9.0",
+    "mysql": "^2.15.0",
     "orm": "^4.0.1"
   },
   "devDependencies": {
     "mocha": "^4.0.1",
     "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
     "supertest": "^3.0.0"
   },
   "scripts": {
