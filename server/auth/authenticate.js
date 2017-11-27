@@ -1,3 +1,3 @@
 module.exports = function (key) {
-    return true;
+    return key === "Fisch";
 }

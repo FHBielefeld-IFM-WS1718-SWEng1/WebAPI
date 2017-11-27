@@ -8,22 +8,18 @@ var temp = {name: "Liste aller User", values: []};
 // POST
 router.post('/', function (req, res, next) {
     if ("email" in req.body && "name" in req.body && "password" in req.body) {
-        var currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-        req.models.user.create({
+        req.models.User.create({
             Name: req.body.name,
             Password: req.body.password,
-            Email: req.body.email,
-            CreatedAt: currentDate,
-            ChangedAt: currentDate
-        }, function (err, results) {
-            if (err) throw err;
-            if (!results) {
-                res.json(results);
-                res.code = 201;
+            Email: req.body.email
+        }).then((results) => {
+            if (results) {
+                delete results.dataValues['Password'];
+                res.json(results.dataValues);
             }
+        }).catch(error => {
+            console.log(error);
         });
-
-
         // res.json(entry);
     } else {
         res.json({error: 400, text: "Das übergebene Element ist für diesen Request ungültig!"});
@@ -34,15 +30,19 @@ router.post('/', function (req, res, next) {
 router.get('/:id', function (req, res, next) {
         if ("id" in req.params && req.params.id) {
             var id = req.params.id;
-            req.models.user.find({Userid: id, DeletedAt: null}, function (err, user) {
-                if (err) throw err;
-                if (user && user.length > 0 && user[0]) {
-                    res.json(user[0]);
-                    return;
+            req.models.User.findById(id)
+                .then((user) => {
+                    if (user) {
+                        res.status(200);
+                        res.json(user);
+                    }else{
+                        res.status(400);
+                        res.json({error:"Kein User mit der ID " + id});
+                    }
+                }).catch((error) => {
+                    next(error);
                 }
-            });
-            throw {message: "", error: "UseLess"};
-            
+            );
         } else {
             res.status(404);
             res.json({id: "missing", name: "get"});
