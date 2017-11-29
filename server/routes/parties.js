@@ -22,7 +22,6 @@ router.post('/', function (req, res, next) {
 router.get('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
         var id = req.params.id;
-        console.log(id);
         var i;
         var erfolg;
         for (i = 0; i < temp.values.length; i++) {
