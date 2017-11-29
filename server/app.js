@@ -24,12 +24,14 @@ app.use(function(req,res,next){
     next();
 });
 app.use('/users', users);
-app.use(function (req, res, next) {
+app.use(function (err, req, res, next) {
     if ("api" in req.query && req.query.api && checkToken(req.query.api)) {
         next();
-    } else {
+    } else if(!err){
         var err = new Error('API Key ungültig!');
         err.status = 403;
+        next(err);
+    } else {
         next(err);
     }
 });
