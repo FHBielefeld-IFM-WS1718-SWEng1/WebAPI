@@ -74,6 +74,7 @@ describe('user', () => {
         });
     });
     describe('DELETE', () => {
+        // todo Abfrage ob ein User gelöscht wurde!
         it('should update a SINGLE blob on /parties/<id> PUT', function (done) {
             chai.request(server)
                 .delete('/users/' + daten.id)
@@ -83,6 +84,5 @@ describe('user', () => {
                     done();
                 });
         });
-
     });
 });
