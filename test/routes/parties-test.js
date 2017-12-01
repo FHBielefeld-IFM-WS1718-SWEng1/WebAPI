@@ -1,6 +1,7 @@
 var object = {};
 describe('parties', () => {
     describe('POST', () => {
+        // todo better tests
         it('should add a SINGLE blob on /parties POST', function (done) {
             chai.request(server)
                 .post('/parties?api=Fisch')
@@ -12,9 +13,9 @@ describe('parties', () => {
                     done();
                 });
         });
-
     });
     describe('GET', () => {
+        // todo bessere tests
         it('should list ALL parties on /parties GET', function (done) {
             chai.request(server)
                 .get('/parties?api=Fisch')
@@ -24,6 +25,7 @@ describe('parties', () => {
                     done();
                 });
         });
+        // todo bessere tests
         it('should list a SINGLE party on /parties/<id> GET', function (done) {
             chai.request(server)
                 .get('/parties/' + object.id + '?api=Fisch')
@@ -36,6 +38,7 @@ describe('parties', () => {
         });
     });
     describe('PUT', () => {
+        // todo bessere tests
         it('should update a SINGLE blob on /parties/<id> PUT', function (done) {
             object.description = "test"
             object.name = "Beispiel t"
@@ -51,6 +54,7 @@ describe('parties', () => {
         });
     });
     describe('DELETE', () => {
+        // todo bessere tests
         it('should delete a SINGLE blob on /parties/<id> DELETE', function (done) {
             chai.request(server)
                 .delete('/parties/' + object.id + '?api=Fisch')
