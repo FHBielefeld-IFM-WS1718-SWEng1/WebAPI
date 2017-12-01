@@ -1,7 +1,6 @@
 language: node_js
 node_js:
   - "node"
-  - "8"
 env:
   - RUN_CONFIG=dev
 before_install:
@@ -10,3 +9,7 @@ install:
   - npm install
 script:
   - mocha
+branches:
+  only:
+  - master
+  - dev
