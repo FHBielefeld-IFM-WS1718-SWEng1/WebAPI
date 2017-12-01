@@ -3,6 +3,7 @@ var logger = require('morgan');     // Logger für Requests
 const bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
 const checkToken = require('./auth/authenticate');
 // alle routen importieren
+const register = require('./routes/register');
 const parties = require('./routes/parties');  // Das erste Routen Module
 const users = require('./routes/user');
 
@@ -23,6 +24,7 @@ app.use(function(req,res,next){
     req.models = models;
     next();
 });
+app.use('/register', register);
 app.use('/users', users);
 app.use(function (err, req, res, next) {
     if ("api" in req.query && req.query.api && checkToken(req.query.api)) {
