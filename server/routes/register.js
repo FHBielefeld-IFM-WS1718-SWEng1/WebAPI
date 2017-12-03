@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var CryptoJS = require("crypto-js");
+var crypt = require("../auth/crypt");
 
 router.post('/', function (req, res, next) {
 
     if ("email" in req.body && "name" in req.body && "password" in req.body) {
         req.models.User.create({
             name: req.body.name,
-            password: "" + CryptoJS.SHA1(req.body.password),
+            password: crypt.enc(req.body.password),
             email: req.body.email
         }).then((results) => {
             if (results) {
