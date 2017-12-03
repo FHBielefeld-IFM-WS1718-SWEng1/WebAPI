@@ -23,6 +23,6 @@
   "scripts": {
     "test": "mocha ",
     "dev": "nodemon",
-    "prd": "node ./server/app"
+    "prd": "node ./server/app 'NODE_ENV=prd'"
   }
 }
