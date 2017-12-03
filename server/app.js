@@ -19,7 +19,17 @@ const app = express();                // erstellen einer Express Node.js Applica
 // app.use(logger('dev'));
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
-
+if(process.env.NODE_ENV != 'prd'){
+    console.log(process.env.NODE_ENV);
+    // TODO Bessere nachrichten als einfach nur erfolg / kein erfolg!
+    sequelize
+        .sync({ force: true })
+        .then(function(err) {
+            console.log('It worked!');
+        }, function (err) {
+            console.log('An error occurred while creating the table:', err);
+        });
+}
 // Hier werden die Routen eingetragten die public sind
 app.use(function(req,res,next){
     req.models = models;
