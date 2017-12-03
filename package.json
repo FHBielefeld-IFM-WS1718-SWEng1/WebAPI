@@ -22,7 +22,7 @@
   },
   "scripts": {
     "test": "mocha ",
-    "dev": "nodemon",
+    "dev": "set NODE_ENV=dev&&nodemon",
     "prd": "node ./server/app 'NODE_ENV=prd'"
   }
 }
