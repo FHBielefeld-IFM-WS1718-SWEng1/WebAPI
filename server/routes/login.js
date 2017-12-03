@@ -11,7 +11,6 @@ router.post('/', function (req, res, next) {
                 var keyArray = CryptoJS.SHA1(rawObject);
                 var key = CryptoJS.enc.Base64.stringify(keyArray);
                 console.log("neuer Key: " + key);
-                // TODO speichern von generierten Key in der Datenbank!
                 req.models.APIKey.create({user_id: userObjekt.id, apiKey: key}).then((result) => {
                     userObjekt.key = key;
                     delete userObjekt.password;
