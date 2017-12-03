@@ -36,7 +36,6 @@ app.use(function(req,res,next){
     next();
 });
 app.use('/login',login);
-app.use('/logout', logout);
 app.use('/register', register);
 app.use(function (err, req, res, next) {
     if (checkToken(req)) {
@@ -50,6 +49,7 @@ app.use(function (err, req, res, next) {
     }
 });
 // Hier werden die Routen eingetragen die Login erfordern
+app.use('/logout', logout);
 app.use('/users', users);
 app.use('/parties', parties);
 
