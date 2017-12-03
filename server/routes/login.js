@@ -5,7 +5,7 @@ router.post('/', function (req, res, next) {
     if('password' in req.body && 'email' in req.body) {
         req.models.User.findAll({where: {email: req.body.email}}).then(function (ergebnisse) {
             // todo hier muss das eingegebene Verschlüsselt werden und dann verglcihen werden
-            if (ergebnisse && ergebnisse[0].password == req.body.password) {
+            if (ergebnisse[0] && ergebnisse[0].password == req.body.password) {
                 res.status(200);
                 // todo hier auch noch einen api key generieren
                 res.json(ergebnisse[0]);
