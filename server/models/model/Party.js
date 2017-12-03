@@ -9,6 +9,6 @@ module.exports = (function (sequelize, Sequelize) {
         createdAt: {type: Sequelize.DATE, field: 'CreatedAt'},
         updatedAt: {type: Sequelize.DATE, field: 'ChangedAt'},
         deletedAt: {type: Sequelize.DATE, field: 'DeletedAt'},
-        user_ID: {type: Sequelize.INTEGER, references: {model: 'User', key: 'ID'}, field: 'User_ID'}
-    });
+        user_id: {type: Sequelize.INTEGER, references: {model: 'User', key: 'ID'}, field: 'User_ID'}
+    }, {paranoid: true});
 });

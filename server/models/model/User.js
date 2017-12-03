@@ -11,5 +11,5 @@ module.exports = (function (sequelize, Sequelize) {
         createdAt: {type: Sequelize.DATE, field: 'CreatedAt'},
         updatedAt: {type: Sequelize.DATE, field: 'ChangedAt'},
         deletedAt: {type: Sequelize.DATE, field: 'DeletedAt'}
-    });
+    }, {paranoid: true});
 });
