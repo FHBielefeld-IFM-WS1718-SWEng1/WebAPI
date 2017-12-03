@@ -8,6 +8,7 @@ const register = require('./routes/register');
 const parties = require('./routes/parties');  // Das erste Routen Module
 const users = require('./routes/user');
 const login = require('./routes/login');
+const logout = require('./routes/logout');
 // Globale Variablen
 var config = require('../databaseconfig.json');
 
@@ -25,6 +26,7 @@ app.use(function(req,res,next){
     next();
 });
 app.use('/login',login);
+app.use('/logout', logout);
 app.use('/register', register);
 app.use(function (err, req, res, next) {
     if (checkToken(req)) {
