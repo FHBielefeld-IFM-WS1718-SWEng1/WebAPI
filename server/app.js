@@ -19,31 +19,30 @@ const app = express();                // erstellen einer Express Node.js Applica
 // app.use(logger('dev'));
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
-if(process.env.NODE_ENV != 'prd'){
+console.log(process.env.NODE_ENV);
+if (process.env.NODE_ENV !== 'prd') {
     console.log(process.env.NODE_ENV);
     // TODO Bessere nachrichten als einfach nur erfolg / kein erfolg!
     sequelize
-        .sync({ force: true })
-        .then(function(err) {
+        .sync({force: true})
+        .then(function (err) {
             console.log('It worked!');
         }, function (err) {
             console.log('An error occurred while creating the table:', err);
         });
 }
 // Hier werden die Routen eingetragten die public sind
-app.use(function(req,res,next){
+app.use(function (req, res, next) {
     req.models = models;
     next();
 });
-app.use('/login',login);
+app.use('/login', login);
 app.use('/register', register);
 app.use(function (err, req, res, next) {
     if (checkToken(req)) {
         next();
-    } else if(!err){
-        var err = new Error('API Key ungültig!');
-        err.status = 403;
-        next(err);
+    } else if (!err) {
+        next({status: 403, message: 'API Key ungültig!'});
     } else {
         next(err);
     }
@@ -56,16 +55,14 @@ app.use('/parties', parties);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+    next({status: 404, message:'Not Found'});
 });
 
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    res.locals.error = req.app.get('env') === 'dev' ? err : {};
 
     res.status(err.status || 500);
     res.json({"error": res.locals.message});
@@ -74,7 +71,7 @@ app.use(function (err, req, res, next) {
 // erstellen eines HTTP servers der Auf Port 8080 hört
 var listener = app.listen(8080, function () {
 
-   // console.log('API listening on ' + listener.address().port);
+    // console.log('API listening on ' + listener.address().port);
 });
 
 
