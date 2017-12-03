@@ -7,7 +7,7 @@ const Sequelize = require('sequelize');
 const register = require('./routes/register');
 const parties = require('./routes/parties');  // Das erste Routen Module
 const users = require('./routes/user');
-
+const login = require('./routes/login');
 // Globale Variablen
 var config = require('../databaseconfig.json');
 
@@ -24,6 +24,7 @@ app.use(function(req,res,next){
     req.models = models;
     next();
 });
+app.use('/login',login);
 app.use('/register', register);
 app.use(function (err, req, res, next) {
     if (checkToken(req)) {
