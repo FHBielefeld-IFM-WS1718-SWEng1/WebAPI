@@ -5,7 +5,7 @@ module.exports = (function (sequelize, Sequelize) {
         description: {type: Sequelize.TEXT, field: 'Description'},
         startDate: {type: Sequelize.DATE, field: 'StartDate'},
         endDate: {type: Sequelize.DATE, field: 'EndDate'},
-        location: {type: Sequelize.String(100), field: 'Location'},
+        location: {type: Sequelize.STRING(100), field: 'Location'},
         createdAt: {type: Sequelize.DATE, field: 'CreatedAt'},
         updatedAt: {type: Sequelize.DATE, field: 'ChangedAt'},
         deletedAt: {type: Sequelize.DATE, field: 'DeletedAt'},
