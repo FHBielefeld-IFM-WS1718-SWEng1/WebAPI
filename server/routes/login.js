@@ -1,22 +1,34 @@
 const express = require('express');
 const router = express.Router();
+var CryptoJS = require("crypto-js");
 
 router.post('/', function (req, res, next) {
-    if('password' in req.body && 'email' in req.body) {
+    if ('password' in req.body && 'email' in req.body) {
         req.models.User.findAll({where: {email: req.body.email}}).then(function (ergebnisse) {
-            // todo hier muss das eingegebene Verschlüsselt werden und dann verglcihen werden
-            if (ergebnisse[0] && ergebnisse[0].password == req.body.password) {
-                res.status(200);
-                // todo hier auch noch einen api key generieren
-                res.json(ergebnisse[0]);
-            }
-            else{
+            if (ergebnisse[0] && ergebnisse[0].password == "" + CryptoJS.SHA1(req.body.password)) {
+                var userObjekt = ergebnisse[0].dataValues;
+                var rawObject = {email: userObjekt.email, datum: Date.now()};
+                var keyArray = CryptoJS.SHA1(rawObject);
+                var key = CryptoJS.enc.Base64.stringify(keyArray);
+                console.log("neuer Key: " + key);
+                // TODO speichern von generierten Key in der Datenbank!
+                req.models.APIKey.create({user_id: userObjekt.id, apiKey: key}).then((result) => {
+                    userObjekt.key = key;
+                    delete userObjekt.password;
+                    res.status(200);
+                    res.json(userObjekt);
+
+                }).catch((err)=>{
+                    res.status(500);
+                    res.json(err)
+                });
+            } else {
                 res.status(400);
                 res.json({error: 'Keine Gültiger Request!'});
             }
         })
     }
-    else{
+    else {
         res.status(400);
         res.json({error: "Kein gültiger Request!"});
     }
