@@ -3,6 +3,8 @@ module.exports = function (req) {
         req.models.APIKey.findOne({where: {apiKey : req.query.api}}).then((results) => {
             if(results){
                 return true;
+            }else{
+                return false;
             }
         }).catch((error)=>{
             return false;
