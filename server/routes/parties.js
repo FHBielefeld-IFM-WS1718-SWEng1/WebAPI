@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+// TODO entwickeln von Route ohne Javascript objekt sondern auf den Stand der DB
 var temp = {name: "Liste aller Partys.", values: []};
 var highestID = 0;
 
 /* POST parties listing. */
+// TODO Route zum anlegen neuer einträge entwickeln
 router.post('/', function (req, res, next) {
     if ("name" in req.body && "description" in req.body && req.body.name && req.body.description) {
         var entry = {};
@@ -19,6 +21,7 @@ router.post('/', function (req, res, next) {
 });
 
 /* GET parties listing. */
+// TODO Route zum anzeigen einer speziellen Party an welche der User Teilnehmen kann oder mitglied ist!
 router.get('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
         var id = req.params.id;
@@ -41,11 +44,13 @@ router.get('/:id', function (req, res, next) {
 });
 
 /* Get All Parties */
+// TODO Route zum anzeigen aller Parties an welche der User teilnimmt
 router.get('/', function (req, res, next) {
     res.json(temp);
 });
 
 /* PUT parties listing. */
+// TODO Route zum abändern
 router.put('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
         var id = req.params.id;
