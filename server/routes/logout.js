@@ -4,8 +4,8 @@ const router = express.Router();
 /**
  * Delete von dem APIKey des Users
  */
-router.delete('/', function (req , res, next){
-    if("apiKey" in req.body){
+router.delete('/', function (req, res, next) {
+    if ("apiKey" in req.body) {
         var key = req.body.apiKey
         req.models.APIKey.destroy({where: {apiKey: key}}).then(result => {
             res.status(200);
@@ -17,3 +17,4 @@ router.delete('/', function (req , res, next){
     }
     res.status(400);
 });
+module.exports = router;
