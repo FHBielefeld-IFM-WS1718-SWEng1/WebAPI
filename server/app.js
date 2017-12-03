@@ -2,6 +2,7 @@ const express = require('express');   // Die express komponente ermöglicht einf
 var logger = require('morgan');     // Logger für Requests
 const bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
 const checkToken = require('./auth/authenticate');
+const Sequelize = require('sequelize');
 // alle routen importieren
 const register = require('./routes/register');
 const parties = require('./routes/parties');  // Das erste Routen Module
@@ -9,7 +10,6 @@ const users = require('./routes/user');
 
 // Globale Variablen
 var config = require('../databaseconfig.json');
-const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize(config.dbname, config.username, config.password, config.opts);
 const models = require("./models/MainModels.js")(sequelize, Sequelize);
@@ -25,7 +25,6 @@ app.use(function(req,res,next){
     next();
 });
 app.use('/register', register);
-app.use('/users', users);
 app.use(function (err, req, res, next) {
     if (checkToken(req)) {
         next();
@@ -38,6 +37,7 @@ app.use(function (err, req, res, next) {
     }
 });
 // Hier werden die Routen eingetragen die Login erfordern
+app.use('/users', users);
 app.use('/parties', parties);
 
 
