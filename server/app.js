@@ -27,7 +27,7 @@ app.use(function(req,res,next){
 app.use('/register', register);
 app.use('/users', users);
 app.use(function (err, req, res, next) {
-    if ("api" in req.query && req.query.api && checkToken(req.query.api)) {
+    if (checkToken(req)) {
         next();
     } else if(!err){
         var err = new Error('API Key ungültig!');
