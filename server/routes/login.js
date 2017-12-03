@@ -6,9 +6,9 @@ router.post('/', function (req, res, next) {
     if ('password' in req.body && 'email' in req.body) {
         req.models.User.findAll({where: {email: req.body.email}}).then(function (ergebnisse) {
             if (ergebnisse[0] && ergebnisse[0].password == "" + CryptoJS.SHA1(req.body.password)) {
+                // TODO wenn bereits ein Key für diesen Nutzer in der Tabelle vorhanden ist kein neuen erstellen! Absprache wie die API reagieren soll 
                 var userObjekt = ergebnisse[0].dataValues;
-                var rawObject = {email: userObjekt.email, datum: Date.now()};
-                var keyArray = CryptoJS.SHA1(rawObject);
+                var keyArray = CryptoJS.SHA1(userObjekt.email + "," + new Date().toLocaleString());
                 var key = CryptoJS.enc.Base64.stringify(keyArray);
                 console.log("neuer Key: " + key);
                 req.models.APIKey.create({user_id: userObjekt.id, apiKey: key}).then((result) => {
