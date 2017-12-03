@@ -3,6 +3,8 @@ var exports = module.exports = function(sequelize, Sequelize){
     temp.User = require("./model/User.js")(sequelize, Sequelize);
     temp.Party = require("./model/Party.js")(sequelize, Sequelize);
     temp.APIKey = require("./model/APIKey.js")(sequelize, Sequelize);
+    temp.User.hasMany(temp.APIKey);
+    temp.APIKey.belongsTo(temp.User);
     temp.Contactlist = require("./model/Contactlist.js")(sequelize, Sequelize);
     temp.Guestlist = require("./model/Guestlist.js")(sequelize, Sequelize);
     temp.Comment = require("./model/Comment.js")(sequelize, Sequelize);
