@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 // TODO entwickeln von Route ohne Javascript objekt sondern auf den Stand der DB
+// TODO wird angefangen =)
 var temp = {name: "Liste aller Partys.", values: []};
 var highestID = 0;
 
@@ -43,9 +44,65 @@ router.get('/:id', function (req, res, next) {
     }
 });
 
-/* Get All Parties */
+/*
+    Hier sollen alle Parties angezeigt werden die entweder von User erstellt wurden oder wo er als Gast eingeladen wurde.
+*/
 // TODO Route zum anzeigen aller Parties an welche der User teilnimmt
 router.get('/', function (req, res, next) {
+    // nach überlegungen wäre es vielleicht besser wenn das Frontend einfach auch den User mit angibt ... dennoch war in der besprechung gesagt worden, dass das Frontend einfach nur den APIKey schmeist
+    // somit müssen wir den User finden dem der APIKey gehört
+    if ('key' in req.query && req.query.key) {
+        // kontrolle ob der API-Key gültig ist
+        // Außerdem wird so die User_ID gefunden
+        req.models.ApiKey.findAll({where: {apiKey: req.query.key}}).then((results) => {
+            if (results.length === 1) {
+                var array = [];
+                // durchsuchen aller Partys wo der User Gast ist
+                req.models.Guestlist.findAll({where: {user_id: results[0].user_id}}).then((resultsGuest) => {
+                    var array2 = []
+                    resultsGuest.forEach((eintrag) => array2.push(eintrag));
+                    req.models.Party.findAll({
+                        where: {
+                            user_ID: results[0].user_id,
+                            id: array2
+                        }
+                    }).then((resultPartysErsteller) => {
+                        resultPartysErsteller.forEach((eintrag) => array.push(eintrag));
+                        res.status(200);
+                        res.json(array);
+                    }).catch((err) => next(err));
+                }).catch((err) => next(err));
+            } else if (results.length > 1) {
+                var error = new error(400, 'doppelte keys vorhanden eindeutigkeit verloren bitte neuen KeyGenerieren!');
+                next(error);
+            } else {
+                var error = new error(400, 'API Key ungültig!');
+                next(error);
+            }
+        })
+    }
+    if ("id" in req.params && req.params.id) {
+        var id = req.params.id;
+        req.models.User.findById(id)
+            .then((user) => {
+                if (user) {
+                    delete user.dataValues.password;
+                    res.status(200);
+                    res.json(user);
+                } else {
+                    res.status(400);
+                    res.json({error: "Kein User mit der ID " + id});
+                }
+            }).catch((error) => {
+                next(error);
+            }
+        );
+    } else {
+        res.status(404);
+        res.json({id: "missing", name: "get"});
+    }
+
+
     res.json(temp);
 });
 
@@ -58,13 +115,13 @@ router.put('/:id', function (req, res, next) {
         var erfolg;
         for (i = 0; i < temp.values.length; i++) {
             if (temp.values[i].id == id) {
-                if("name" in req.body && req.body.name ){
+                if ("name" in req.body && req.body.name) {
                     temp.values[i].name = req.body.name;
                 }
-                if("description" in req.body && req.body.description ){
+                if ("description" in req.body && req.body.description) {
                     temp.values[i].description = req.body.description;
                 }
-                if("invited" in req.body && req.body.invited ){
+                if ("invited" in req.body && req.body.invited) {
                     temp.values[i].invited = req.body.invited || [];
                 }
                 res.status = 200
@@ -79,7 +136,6 @@ router.put('/:id', function (req, res, next) {
         res.json({id: "missing", name: "get"});
     }
 });
-
 
 
 /* DELETE parties listing. */
@@ -102,5 +158,4 @@ router.delete('/:id', function (req, res, next) {
         res.json({id: "missing", name: "get"});
     }
 });
-
 module.exports = router;
