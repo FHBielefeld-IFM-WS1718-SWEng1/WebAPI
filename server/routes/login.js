@@ -21,3 +21,4 @@ router.post('/', function (req, res, next) {
         res.json({error: "Kein gültiger Request!"});
     }
 });
+module.exports = router;
