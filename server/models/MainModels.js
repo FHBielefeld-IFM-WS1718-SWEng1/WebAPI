@@ -14,6 +14,7 @@ var exports = module.exports = function (sequelize, Sequelize) {
     temp.Task = require("./model/Task.js")(sequelize, Sequelize);
     temp.Choice = require("./model/Choice.js")(sequelize, Sequelize);
     temp.UserChoice = require("./model/UserChoice.js")(sequelize, Sequelize);
+    temp.Rating = require("./model/Rating")(sequelize, Sequelize);
     // Relationen
     temp.User.hasMany(temp.Party, {foreignKey: 'user_id'});
     temp.Party.belongsTo(temp.User, {foreignKey: 'user_id'});
