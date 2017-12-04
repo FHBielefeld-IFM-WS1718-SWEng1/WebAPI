@@ -19,8 +19,7 @@ const app = express();                // erstellen einer Express Node.js Applica
 // app.use(logger('dev'));
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
-console.log(process.env.NODE_ENV);
-if (process.env.NODE_ENV !== 'prd') {
+if (process.env.NODE_ENV === 'dev') {
     console.log(process.env.NODE_ENV);
     // TODO Bessere nachrichten als einfach nur erfolg / kein erfolg!
     sequelize
@@ -75,4 +74,4 @@ var listener = app.listen(8080, function () {
 });
 
 
-module.exports = listener;
+module.exports = {listener: listener, sequelize: sequelize};
