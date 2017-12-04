@@ -1,4 +1,4 @@
-describe('login', () => {
+describe('logout', () => {
     describe('POST', () => {
         it('es ist erlaubt sich einzuloggen', (done) => {
             chai.request(server)
