@@ -1,3 +1,8 @@
+function bindbi(hasmany, belongs, key) {
+    hasmany.hasMany(belongs, {foreignKey: key});
+    belongs.belongsTo(hasmany, {foreignKey: key});
+}
+
 var exports = module.exports = function (sequelize, Sequelize) {
     var temp = {};
     // model definitionen
@@ -16,52 +21,31 @@ var exports = module.exports = function (sequelize, Sequelize) {
     temp.UserChoice = require("./model/UserChoice.js")(sequelize, Sequelize);
     temp.Rating = require("./model/Rating")(sequelize, Sequelize);
     // Relationen
-    temp.User.hasMany(temp.Party, {foreignKey: 'user_id'});
-    temp.Party.belongsTo(temp.User, {foreignKey: 'user_id'});
+    bindbi(temp.User, temp.Party, 'user_id');
+    bindbi(temp.User, temp.APIKey, 'user_id');
+    bindbi(temp.User, temp.Contactlist, 'user_id1');
+    bindbi(temp.User, temp.Contactlist, 'user_id2');
+    bindbi(temp.User, temp.Guestlist, 'user_id');
+    bindbi(temp.User, temp.Comment, 'user_id');
+    bindbi(temp.User, temp.Answer, 'user_id');
+    bindbi(temp.User, temp.Task, 'user_id');
+    bindbi(temp.User, temp.UserChoice, 'user_id');
+    bindbi(temp.User, temp.Voting, 'user_id');
+    bindbi(temp.User, temp.Rating, 'user_id');
 
-    temp.User.hasMany(temp.APIKey, {foreignKey: 'user_id'});
-    temp.APIKey.belongsTo(temp.User, {foreignKey: 'user_id'});
+    bindbi(temp.Party, temp.Guestlist, 'party_id');
+    bindbi(temp.Party, temp.Comment, 'party_id');
+    bindbi(temp.Party, temp.Calculationitem, 'party_id');
+    bindbi(temp.Party, temp.Task, 'party_id');
+    bindbi(temp.Party, temp.Todolistitem, 'party_id');
+    bindbi(temp.Party, temp.Voting, 'party_id');
+    bindbi(temp.Party, temp.Rating, 'party_id');
 
-    temp.Contactlist.belongsTo(temp.User, {foreignKey: 'user_id1'});
-    temp.User.hasMany(temp.Contactlist, {foreignKey: 'user_id1'});
-    temp.Contactlist.belongsTo(temp.User, {foreignKey: 'user_id2'});
-    temp.User.hasMany(temp.Contactlist, {foreignKey: 'user_id2'});
+    bindbi(temp.Comment, temp.Answer, 'comment_id');
 
-    temp.Guestlist.belongsTo(temp.Party, {foreignKey: 'party_id'});
-    temp.Party.hasMany(temp.Guestlist, {foreignKey: 'party_id'});
-    temp.Guestlist.belongsTo(temp.User, {foreignKey: 'user_id'});
-    temp.User.hasMany(temp.Guestlist, {foreignKey: 'user_id'});
+    bindbi(temp.Choice, temp.UserChoice, 'comment_id');
 
-    temp.Comment.belongsTo(temp.Party, {foreignKey: 'party_id'});
-    temp.Party.hasMany(temp.Comment, {foreignKey: 'party_id'});
-    temp.Comment.belongsTo(temp.User, {foreignKey: 'user_id'});
-    temp.User.hasMany(temp.Comment, {foreignKey: 'user_id'});
-
-    temp.Answer.belongsTo(temp.Comment, {foreignKey: 'comment_id'});
-    temp.Comment.hasMany(temp.Answer, {foreignKey: 'comment_id'});
-    temp.Answer.belongsTo(temp.User, {foreignKey: 'user_id'});
-    temp.User.hasMany(temp.Answer, {foreignKey: 'user_id'});
-
-    temp.Calculationitem.belongsTo(temp.Party, {foreignKey: 'party_id'});
-    temp.Party.hasMany(temp.Calculationitem, {foreignKey: 'party_id'});
-
-    temp.Task.belongsTo(temp.Party, {foreignKey: 'party_id'});
-    temp.Party.hasMany(temp.Task, {foreignKey: 'party_id'});
-    temp.Task.belongsTo(temp.User, {foreignKey: 'user_id'});
-    temp.User.hasMany(temp.Task, {foreignKey: 'user_id'});
-
-    temp.Todolistitem.belongsTo(temp.Party, {foreignKey: 'party_id'});
-    temp.Party.hasMany(temp.Todolistitem, {foreignKey: 'party_id'});
-
-    temp.UserChoice.belongsTo(temp.Choice, {foreignKey: 'choice_id'});
-    temp.Choice.hasMany(temp.UserChoice, {foreignKey: 'choice_id'});
-    temp.UserChoice.belongsTo(temp.User, {foreignKey: 'user_id'});
-    temp.User.hasMany(temp.UserChoice, {foreignKey: 'user_id'});
-
-    temp.Voting.belongsTo(temp.Party, {foreignKey: 'party_id'});
-    temp.Party.hasMany(temp.Voting, {foreignKey: 'party_id'});
-    temp.Voting.belongsTo(temp.User, {foreignKey: 'user_id'});
-    temp.User.hasMany(temp.Voting, {foreignKey: 'user_id'});
+    bindbi(temp.Voting, temp.Choice, 'voting_id');
 
     return temp;
 };
