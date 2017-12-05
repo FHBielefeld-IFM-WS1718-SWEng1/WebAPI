@@ -58,11 +58,9 @@ router.get('/', function (req, res, next) {
                     }).catch((err) => next(err));
                 }).catch((err) => next(err));
             } else if (results.length > 1) {
-                var error = new error(400, 'doppelte keys vorhanden eindeutigkeit verloren bitte neuen KeyGenerieren!');
-                next(error);
+                next({status: 400, message: 'doppelte keys vorhanden eindeutigkeit verloren bitte neuen KeyGenerieren!'});
             } else {
-                var error = new error(400, 'API Key ungültig!');
-                next(error);
+                next({status: 400, message: "Kein gültiger API Key verfügbar!"});
             }
         }).catch(err => next(err));
     } else {
