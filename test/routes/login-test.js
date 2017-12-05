@@ -52,7 +52,7 @@ describe('login', () => {
                 .end(function (err, res) {
                     expect(res).to.have.status(404);
                     expect(res).to.be.json;
-                    object = res.body
+                    object = res.body;
                     done();
                 });
         });
