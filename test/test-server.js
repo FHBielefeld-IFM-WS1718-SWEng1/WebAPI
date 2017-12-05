@@ -4,4 +4,16 @@ global.chai = require('chai');
 global.chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 global.expect = chai.expect;
-global.server = require("../server/app");
+const app = require("../server/app");
+global.server = app.listener;
+
+before(function(done){
+    app.sequelize
+        .sync({force: true})
+        .then(function (err) {
+            console.log("db erstellt");
+            done();
+        }, function (err) {
+            console.log('An error occurred while creating the table:', err);
+        });
+});

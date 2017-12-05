@@ -6,8 +6,7 @@
     "dialect": "sqlite",
     "logging": false,
     "define": {
-      "freezeTableName": true,
-      "paranoid": true
+      "freezeTableName": true
     },
     "storage": "./db.db"
   }
