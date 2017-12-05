@@ -1,0 +1,5 @@
+--recursive
+--ui tdd
+--reporter spec
+--exit
+--no-deprecation
