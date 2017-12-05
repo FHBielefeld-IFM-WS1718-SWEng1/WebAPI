@@ -1,9 +1,18 @@
 describe('login', () => {
+    // TODO: before einrichten Test schlägt fehl da keine daten in der db existieren!
+    before((done)=>{
+        chai.request(server)
+            .post('/register')
+            .send({name: "Peter", email: "fischer2@fisch.de", password: "strenggeheim"})
+            .end(function (err, res) {
+                done();
+            });
+    });
     describe('POST', () => {
         it('es ist erlaubt sich einzuloggen', (done) => {
             chai.request(server)
                 .post('/login')
-                .send({email: "fisch@fisch.de", password: "strenggeheim"})
+                .send({email: "fischer2@fisch.de", password: "strenggeheim"})
                 .end(function (err, res) {
                     expect(res).to.have.status(200);
                     expect(res).to.be.json;
