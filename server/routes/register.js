@@ -14,9 +14,10 @@ router.post('/', function (req, res, next) {
                 res.json(results.dataValues);
             }
         }).catch(error => {
+            next({status:400, message:error.errors[0].message})
         });
     } else {
-        res.json({error: 400, text: "Das übergebene Element ist für diesen Request ungültig!"});
+        next({status: 400, message: "Das übergebene Element ist für diesen Request ungültig!"});
     }
 });
 
