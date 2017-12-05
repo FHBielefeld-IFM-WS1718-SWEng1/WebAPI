@@ -7,11 +7,11 @@ global.expect = chai.expect;
 const app = require("../server/app");
 global.server = app.listener;
 
-it("erstellen der Datenbank. Warten auf abschliessen des erstellens", function(done){
-    this.timeout(999999);
+before(function(done){
     app.sequelize
         .sync({force: true})
         .then(function (err) {
+            console.log("db erstellt");
             done();
         }, function (err) {
             console.log('An error occurred while creating the table:', err);

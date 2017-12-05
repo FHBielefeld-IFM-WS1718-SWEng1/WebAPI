@@ -27,7 +27,6 @@ router.post('/', function (req, res, next) {
 */
 // TODO Route zum anzeigen aller Parties an welche der User teilnimmt
 router.get('/', function (req, res, next) {
-    console.log('get/ohneid');
     // nach überlegungen wäre es vielleicht besser wenn das Frontend einfach auch den User mit angibt ... dennoch war in der besprechung gesagt worden, dass das Frontend einfach nur den APIKey schmeist
     // somit müssen wir den User finden dem der APIKey gehört
     if ('api' in req.query && req.query.api) {
@@ -37,15 +36,11 @@ router.get('/', function (req, res, next) {
             include: [{model: req.models.User}],
             where: {apiKey: req.query.api}
         }).then((results) => {
-            console.log(results[0])
-            console.log();
             if (results.length === 1) {
                 var array = [];
                 req.models.User.findAll({
                     where: {id: results[0].user_id}
                 }).then((user) => {
-                    console.log(user);
-                    console.log();
                 });
                 // durchsuchen aller Partys wo der User Gast ist
                 req.models.Guestlist.findAll({where: {user_id: results[0].user_id}}).then((resultsGuest) => {
@@ -58,16 +53,11 @@ router.get('/', function (req, res, next) {
                         }
                     }).then((resultPartysErsteller) => {
                         resultPartysErsteller.forEach((eintrag) => array.push(eintrag));
-                        console.log(array2);
-                        console.log();
-                        console.log(array);
-                        console.log();
                         res.status(200);
                         res.json(array);
                     }).catch((err) => next(err));
                 }).catch((err) => next(err));
             } else if (results.length > 1) {
-                console.log(res.header);
                 var error = new error(400, 'doppelte keys vorhanden eindeutigkeit verloren bitte neuen KeyGenerieren!');
                 next(error);
             } else {
@@ -83,7 +73,6 @@ router.get('/', function (req, res, next) {
 /* GET parties listing. */
 // TODO Route zum anzeigen einer speziellen Party an welche der User Teilnehmen kann oder mitglied ist!
 router.get('/:id', function (req, res, next) {
-    console.log('get/id');
     if ("id" in req.params && req.params.id) {
         var id = req.params.id;
         var i;

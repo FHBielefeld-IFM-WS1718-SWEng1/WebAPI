@@ -3,7 +3,6 @@ var router = express.Router();
 var crypt = require("../auth/crypt");
 
 router.post('/', function (req, res, next) {
-
     if ("email" in req.body && "name" in req.body && "password" in req.body) {
         req.models.User.create({
             name: req.body.name,
@@ -15,7 +14,6 @@ router.post('/', function (req, res, next) {
                 res.json(results.dataValues);
             }
         }).catch(error => {
-            console.log(error);
         });
     } else {
         res.json({error: 400, text: "Das übergebene Element ist für diesen Request ungültig!"});
