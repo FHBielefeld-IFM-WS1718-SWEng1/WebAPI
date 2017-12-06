@@ -38,18 +38,19 @@ app.use(function (req, res, next) {
 });
 app.use('/login', login);
 app.use('/register', register);
-app.use(async function (req, res, next) {
-    try {
-        await checkToken(req);
-        console.log("erfolg");
-        next();
-    }catch(err){
+app.use(async function (err, req, res, next) {
+    if (err) {
         console.log(err);
-        console.log("err");
-        next(err);
+        next();
+    } else {
+        try {
+            await checkToken(req);
+            next();
+        } catch (err) {
+            next(err);
+        }
     }
-})
-;
+});
 // Hier werden die Routen eingetragen die Login erfordern
 app.use('/logout', logout);
 app.use('/users', users);
@@ -65,6 +66,9 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
+    if (err.status === 404) {
+        err.message = "Die gewünschte Seite ist nicht vorhandden!";
+    }
     res.locals.error = req.app.get('env') === 'dev' ? err : {};
 
     res.status(err.status || 500);
