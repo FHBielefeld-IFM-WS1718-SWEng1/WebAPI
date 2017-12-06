@@ -45,20 +45,11 @@ app.use('/register', register);
 app.use('/login', page404);
 app.use('/register', page404);
 
-app.use((req, res, next) => {
-    console.log("Why?")
-    next();
-},(err, req, res, next) => {
-    console.log("Hello World!")
-    next();
-});
 app.use(async function (req, res, next) {
     try {
         let temp = await checkToken(req);
-        console.log(temp);
         next();
     } catch (err) {
-        console.log(err);
         next(err);
     }
 });
@@ -75,10 +66,10 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
-    res.locals.message = err.message;
     if (err.status === 404) {
         err.message = "Die gewünschte Seite ist nicht vorhandden!";
     }
+    res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'dev' ? err : {};
 
     res.status(err.status || 500);
@@ -87,7 +78,6 @@ app.use(function (err, req, res, next) {
 
 // erstellen eines HTTP servers der Auf Port 8080 hört
 var listener = app.listen(8080, function () {
-
     // console.log('API listening on ' + listener.address().port);
 });
 
