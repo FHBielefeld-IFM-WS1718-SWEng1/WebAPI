@@ -31,18 +31,17 @@ describe('Utilities', () => {
     });
     describe('changeValueIFExists', () => {
         describe('Key vorhanden ', () => {
-            let ob1;
-            let ob2;
-            beforeEach((done)=>{
-                ob1 = {name: "Peter", integer: 12, temp: [], obje: {}};
-                ob2 = {};
+            let fromob, intoob;
+            beforeEach((done) => {
+                fromob = {name: "Peter", integer: 12, temp: [], obje: {}};
+                intoob = {};
                 done();
             });
 
             ["name", "integer", "temp", "obje"].forEach((value) => {
                 it(value + " soll vorhanden sein", function (done) {
-                    util.changeValueIfExists(ob1,ob2, value);
-                    expect(ob2[value]).to.be.equal(ob1[value]);
+                    util.changeValueIfExists(intoob, fromob, value);
+                    expect(intoob[value]).to.be.equal(fromob[value]);
                     done();
                 });
             });
