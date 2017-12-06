@@ -1,4 +1,4 @@
-describe('user', () => {
+describe.skip('user', () => {
     daten = {name: "DBTESTUSER", password: "strenggeheim", email: "test@test.de"};
     describe('POST', () => {
         it('Hinzufügen eines Users mit minimalDaten soll möglich sein', function (done) {
