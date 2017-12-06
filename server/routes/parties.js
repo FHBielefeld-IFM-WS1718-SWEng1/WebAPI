@@ -50,9 +50,9 @@ router.get('/', function (req, res, next) {
                     }).then((resultPartysErsteller) => {
                         resultPartysErsteller.forEach((eintrag) => array.push(eintrag));
                         res.status(200);
-                        res.json(array);
-                    }).catch((err) => next(err));
-                }).catch((err) => next(err));
+            res.json(array);
+        }).catch((err) => next(err));
+    }).catch((err) => next(err));
             } else if (results.length > 1) {
                 next({status: 400, message: 'doppelte keys vorhanden eindeutigkeit verloren bitte neuen KeyGenerieren!'});
             } else {
@@ -80,7 +80,7 @@ router.get('/:id', function (req, res, next) {
         if (!erfolg) {
             res.status = 404
             res.json({error: "Keine Partie mit der id " + id});
-        }
+                }
     } else {
         res.status(404);
         res.json({id: "missing", name: "get"});
@@ -90,31 +90,27 @@ router.get('/:id', function (req, res, next) {
 /* PUT parties listing. */
 // TODO Route zum abändern
 router.put('/:id', function (req, res, next) {
-    if ("id" in req.params && req.params.id) {
-        var id = req.params.id;
-        var i;
-        var erfolg;
-        for (i = 0; i < temp.values.length; i++) {
-            if (temp.values[i].id == id) {
-                if ("name" in req.body && req.body.name) {
-                    temp.values[i].name = req.body.name;
+    if (util.hasKey(req.params, "id")) {
+        req.models.Party.findById(req.params.id)
+            .then(result => {
+                if (result) {
+                    util.changeValueIfExists(result, req.body, "name");
+                    util.changeValueIfExists(result, req.body, "description");
+                    util.changeValueIfExists(result, req.body, "startDate");
+                    util.changeValueIfExists(result, req.body, "endDate");
+                    util.changeValueIfExists(result, req.body, "location");
+                    result.save().then(result => {
+                        res.status(200);
+                        res.json(result)
+                    }).catch(err => next(err));
+                } else {
+                    next({status: 400, message: "Kein element mit dieser id gefunden!"});
                 }
-                if ("description" in req.body && req.body.description) {
-                    temp.values[i].description = req.body.description;
-                }
-                if ("invited" in req.body && req.body.invited) {
-                    temp.values[i].invited = req.body.invited || [];
-                }
-                res.status = 200;
-                res.json(temp.values[i]);
-                erfolg = true;
-            }
-        }
-        if (!erfolg) {
-            res.json({error: 404, name: "Keine Partie mit der id " + id});
-        }
+            })
+            .catch(err => next(err));
+
     } else {
-        res.json({id: "missing", name: "get"});
+        next({status: 400, message: "Keine id übergeben"});
     }
 });
 
