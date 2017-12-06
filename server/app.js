@@ -16,6 +16,9 @@ const sequelize = new Sequelize(config.dbname, config.username, config.password,
 const models = require("./models/MainModels.js")(sequelize, Sequelize);
 const app = express();                // erstellen einer Express Node.js Application
 
+const page404 = (req, res, next) => next({status: 404});
+
+
 // app.use(logger('dev'));
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
@@ -36,15 +39,26 @@ app.use(function (req, res, next) {
     req.models = models;
     next();
 });
+
 app.use('/login', login);
 app.use('/register', register);
+app.use('/login', page404);
+app.use('/register', page404);
+
+app.use((req, res, next) => {
+    console.log("Why?")
+    next();
+},(err, req, res, next) => {
+    console.log("Hello World!")
+    next();
+});
 app.use(async function (req, res, next) {
     try {
         let temp = await checkToken(req);
         console.log(temp);
         next();
     } catch (err) {
-        console.log("error");
+        console.log(err);
         next(err);
     }
 });
@@ -58,7 +72,6 @@ app.use('/parties', parties);
 app.use(function (req, res, next) {
     next({status: 404, message: 'Not Found'});
 });
-
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
