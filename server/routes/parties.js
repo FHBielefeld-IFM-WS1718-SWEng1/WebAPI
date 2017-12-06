@@ -4,16 +4,25 @@ const util = require('../auth/utilities');
 /* POST parties listing. */
 // TODO Route zum anlegen neuer einträge entwickeln
 router.post('/', function (req, res, next) {
-    if ("name" in req.body && "description" in req.body && req.body.name && req.body.description) {
-        var entry = {};
-        entry.id = highestID++;
+    if (util.hasKey(req.body, "name") &&
+        util.hasKey(req.body, "startdate") &&
+        util.hasKey(req.body, "location")) {
+
+        let entry = {};
+
         entry.name = req.body.name;
-        entry.description = req.body.description;
-        entry.invited = req.body.invited || [];
-        temp.values.push(entry);
-        res.json(entry);
+        entry.startdate = req.body.startdate;
+        entry.location = req.body.location;
+        entry.user_id = req.user_id;
+
+        req.models.Party.create(entry)
+            .then(result => {
+                res.status(201);
+                res.json(result);
+            })
+            .catch(err => next(err));
     } else {
-        res.json({error: 400, text: "Das übergebene Element ist für diesen Request ungültig!"});
+        next({status: 400, message: "Das übergebene Element ist für diesen Request ungültig!"});
     }
 });
 
