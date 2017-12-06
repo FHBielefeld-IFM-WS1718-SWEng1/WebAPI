@@ -38,14 +38,10 @@ app.use(function (req, res, next) {
 });
 app.use('/login', login);
 app.use('/register', register);
-app.use(function (err, req, res, next) {
-    if (checkToken(req)) {
-        next();
-    } else if (!err) {
-        next({status: 403, message: 'API Key ungültig!'});
-    } else {
-        next(err);
-    }
+app.use(function (req, res, next) {
+    checkToken(req)
+        .then(() => next())
+        .catch((err) => next(err));
 });
 // Hier werden die Routen eingetragen die Login erfordern
 app.use('/logout', logout);
@@ -55,7 +51,7 @@ app.use('/parties', parties);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next({status: 404, message:'Not Found'});
+    next({status: 404, message: 'Not Found'});
 });
 
 // error handler
