@@ -1,10 +1,6 @@
-var express = require('express');
-var router = express.Router();
-// TODO entwickeln von Route ohne Javascript objekt sondern auf den Stand der DB
-// TODO wird angefangen =)
-var temp = {name: "Liste aller Partys.", values: []};
-var highestID = 0;
-
+const express = require('express');
+const router = express.Router();
+const util = require('../auth/utilities');
 /* POST parties listing. */
 // TODO Route zum anlegen neuer einträge entwickeln
 router.post('/', function (req, res, next) {
