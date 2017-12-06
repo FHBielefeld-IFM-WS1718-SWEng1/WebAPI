@@ -13,7 +13,7 @@ router.post('/', function (req, res, next) {
         entry.name = req.body.name;
         entry.startdate = req.body.startdate;
         entry.location = req.body.location;
-        entry.user_id = req.user_id;
+        entry.user_id = req.userid;
 
         req.models.Party.create(entry)
             .then(result => {
@@ -34,43 +34,35 @@ router.post('/', function (req, res, next) {
 router.get('/', function (req, res, next) {
     // nach überlegungen wäre es vielleicht besser wenn das Frontend einfach auch den User mit angibt ... dennoch war in der besprechung gesagt worden, dass das Frontend einfach nur den APIKey schmeist
     // somit müssen wir den User finden dem der APIKey gehört
-    if ('api' in req.query && req.query.api) {
-        // kontrolle ob der API-Key gültig ist
-        // Außerdem wird so die User_ID gefunden
-        req.models.APIKey.findAll({
-            include: [{model: req.models.User}],
-            where: {apiKey: req.query.api}
-        }).then((results) => {
-            if (results.length === 1) {
-                var array = [];
-                req.models.User.findAll({
-                    where: {id: results[0].user_id}
-                }).then((user) => {
-                });
-                // durchsuchen aller Partys wo der User Gast ist
-                req.models.Guestlist.findAll({where: {user_id: results[0].user_id}}).then((resultsGuest) => {
-                    var array2 = []
-                    resultsGuest.forEach((eintrag) => array2.push(eintrag));
-                    req.models.Party.findAll({
-                        where: {
-                            user_ID: results[0].user_id,
-                            id: array2
-                        }
-                    }).then((resultPartysErsteller) => {
-                        resultPartysErsteller.forEach((eintrag) => array.push(eintrag));
-                        res.status(200);
+    console.log("Partie PArtie");
+    var array = [];
+    req.models.User.findById(req.userid, {
+        include: [
+            {model: req.models.Party},
+            {
+                model: req.models.Guestlist, include: [
+                    {model: req.models.Party}
+                ]
+            }
+        ]
+    }).then((user) => {
+        console.log(user);
+    }).catch((err) => next(err));
+    // durchsuchen aller Partys wo der User Gast ist
+    req.models.Guestlist.findAll({where: {user_id: req.userid}}).then((resultsGuest) => {
+        var array2 = []
+        resultsGuest.forEach((eintrag) => array2.push(eintrag));
+        req.models.Party.findAll({
+            where: {
+                user_ID: req.userid,
+                id: array2
+            }
+        }).then((resultPartysErsteller) => {
+            resultPartysErsteller.forEach((eintrag) => array.push(eintrag));
+            res.status(200);
             res.json(array);
         }).catch((err) => next(err));
     }).catch((err) => next(err));
-            } else if (results.length > 1) {
-                next({status: 400, message: 'doppelte keys vorhanden eindeutigkeit verloren bitte neuen KeyGenerieren!'});
-            } else {
-                next({status: 400, message: "Kein gültiger API Key verfügbar!"});
-            }
-        }).catch(err => next(err));
-    } else {
-        res.json({error: "Du scheis node"});
-    }
 });
 
 /* GET parties listing. */
