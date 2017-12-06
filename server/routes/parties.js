@@ -68,22 +68,17 @@ router.get('/', function (req, res, next) {
 // TODO Route zum anzeigen einer speziellen Party an welche der User Teilnehmen kann oder mitglied ist!
 router.get('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
-        var id = req.params.id;
-        var i;
-        var erfolg;
-        for (i = 0; i < temp.values.length; i++) {
-            if (temp.values[i].id == id) {
-                res.json(temp.values[id]);
-                erfolg = true;
-            }
-        }
-        if (!erfolg) {
-            res.status = 404
-            res.json({error: "Keine Partie mit der id " + id});
+        req.models.Party.findById(req.params.id)
+            .then((result) => {
+                if (result) {
+                    res.status(200);
+                    res.json(result);
+                } else {
+                    next({status: 400, message: "Keine Partie mit der id " + req.params.id})
                 }
+            }).catch(err => next(err));
     } else {
-        res.status(404);
-        res.json({id: "missing", name: "get"});
+        next({status: 400, message: "Keine gültige ID wurde übergeben!"});
     }
 });
 
