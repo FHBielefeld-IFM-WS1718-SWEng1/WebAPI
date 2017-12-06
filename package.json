@@ -24,5 +24,14 @@
     "test": "mocha ",
     "dev": "set NODE_ENV=dev&&nodemon",
     "prd": "node ./server/app 'NODE_ENV=prd'"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "docs/*",
+      "db.db",
+      "db.db-journal"
+    ],
+    "delay": "2500"
   }
 }
