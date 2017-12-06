@@ -38,17 +38,14 @@ app.use(function (req, res, next) {
 });
 app.use('/login', login);
 app.use('/register', register);
-app.use(async function (err, req, res, next) {
-    if (err) {
-        console.log(err);
+app.use(async function (req, res, next) {
+    try {
+        let temp = await checkToken(req);
+        console.log(temp);
         next();
-    } else {
-        try {
-            await checkToken(req);
-            next();
-        } catch (err) {
-            next(err);
-        }
+    } catch (err) {
+        console.log("error");
+        next(err);
     }
 });
 // Hier werden die Routen eingetragen die Login erfordern
