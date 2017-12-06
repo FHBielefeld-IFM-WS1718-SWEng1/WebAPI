@@ -7,11 +7,11 @@ module.exports = function (req) {
                     req.userid = results.dataValues.user_id;
                     resolve("true");
                 } else {
-                    reject("error");
+                    reject({status: 403, message: "kein gültiger api schlüssel"});
                 }
             }).catch((error) => reject(error));
         } else {
-            reject("error2");
+            reject({status: 401, message: "Kein API Key angegeben!"});
         }
     });
 };
