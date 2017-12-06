@@ -123,20 +123,14 @@ router.put('/:id', function (req, res, next) {
 router.delete('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
         var id = req.params.id;
-        var i;
-        var erfolg;
-        for (i = 0; i < temp.values.length; i++) {
-            if (temp.values[i].id === id) {
-                temp.values.splice(i, 1);
-                res.json({status: "erfolg", text: "element gelöscht"});
-                erfolg = true;
-            }
-        }
-        if (!erfolg) {
-            res.json({error: 404, name: "Keine Partie mit der id " + id});
-        }
+        req.models.Party.destroy({where: {id: id}}).then(result => {
+            res.status(200);
+            res.json({message: "erfolgreich", deletedItems: result});
+        }).catch(err => {
+            next(err);
+        })
     } else {
-        res.json({id: "missing", name: "get"});
+        next({status: 400, message: "Keine id übergeben."});
     }
 });
 module.exports = router;
