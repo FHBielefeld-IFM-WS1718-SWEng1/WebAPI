@@ -5,7 +5,6 @@ const crypt = require('../auth/crypt');
 router.post('/', function (req, res, next) {
     if ('password' in req.body && 'email' in req.body) {
         req.models.User.findAll({where: {email: req.body.email}}).then(function (ergebnisse) {
-
             if (ergebnisse[0] && ergebnisse[0].password == crypt.enc(req.body.password)) {
                 // TODO wenn bereits ein Key für diesen Nutzer in der Tabelle vorhanden ist kein neuen erstellen! Absprache wie die API reagieren soll 
                 var userObjekt = ergebnisse[0].dataValues;
@@ -15,20 +14,15 @@ router.post('/', function (req, res, next) {
                     delete userObjekt.password;
                     res.status(200);
                     res.json(userObjekt);
-
                 }).catch((err) => {
-                    res.status(500);
-                    res.json(err)
+                    next(err);
                 });
             } else {
-                res.status(400);
-                res.json({error: 'Keine Gültiger Request!'});
+                next({status: 400, message: "Kein gültiger Request!"});
             }
         })
-    }
-    else {
-        res.status(400);
-        res.json({error: "Kein gültiger Request!"});
+    } else {
+        next({status: 400, message: "Kein gültiger Request!"});
     }
 });
 module.exports = router;
