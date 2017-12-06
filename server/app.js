@@ -25,11 +25,12 @@ if (process.env.NODE_ENV === 'dev') {
     sequelize
         .sync({force: true})
         .then(function (err) {
-            console.log('It worked!');
+            console.log("Datenbank wurde erfolgreich neuerstellt!");
         }, function (err) {
-            console.log('An error occurred while creating the table:', err);
+            console.log('Beim erstellen der Datenbank ist folgender Fehler aufgetretten:', err);
         });
 }
+
 // Hier werden die Routen eingetragten die public sind
 app.use(function (req, res, next) {
     req.models = models;
