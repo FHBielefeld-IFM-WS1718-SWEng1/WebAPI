@@ -16,6 +16,9 @@ const sequelize = new Sequelize(config.dbname, config.username, config.password,
 const models = require("./models/MainModels.js")(sequelize, Sequelize);
 const app = express();                // erstellen einer Express Node.js Application
 
+const page404 = (req, res, next) => next({status: 404});
+
+
 // app.use(logger('dev'));
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
@@ -25,24 +28,28 @@ if (process.env.NODE_ENV === 'dev') {
     sequelize
         .sync({force: true})
         .then(function (err) {
-            console.log('It worked!');
+            console.log("Datenbank wurde erfolgreich neuerstellt!");
         }, function (err) {
-            console.log('An error occurred while creating the table:', err);
+            console.log('Beim erstellen der Datenbank ist folgender Fehler aufgetretten:', err);
         });
 }
+
 // Hier werden die Routen eingetragten die public sind
 app.use(function (req, res, next) {
     req.models = models;
     next();
 });
+
 app.use('/login', login);
 app.use('/register', register);
-app.use(function (err, req, res, next) {
-    if (checkToken(req)) {
+app.use('/login', page404);
+app.use('/register', page404);
+
+app.use(async function (req, res, next) {
+    try {
+        let temp = await checkToken(req);
         next();
-    } else if (!err) {
-        next({status: 403, message: 'API Key ungültig!'});
-    } else {
+    } catch (err) {
         next(err);
     }
 });
@@ -54,12 +61,14 @@ app.use('/parties', parties);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next({status: 404, message:'Not Found'});
+    next({status: 404, message: 'Not Found'});
 });
-
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
+    if (err.status === 404) {
+        err.message = "Die gewünschte Seite ist nicht vorhandden!";
+    }
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'dev' ? err : {};
 
@@ -69,7 +78,6 @@ app.use(function (err, req, res, next) {
 
 // erstellen eines HTTP servers der Auf Port 8080 hört
 var listener = app.listen(8080, function () {
-
     // console.log('API listening on ' + listener.address().port);
 });
 
