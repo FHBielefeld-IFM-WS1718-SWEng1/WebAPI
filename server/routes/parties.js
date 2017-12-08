@@ -38,12 +38,11 @@ router.get('/', function (req, res, next) {
     var array = [];
     req.models.User.findById(req.userid, {
         include: [
-            {model: req.models.Party},
             {
-                model: req.models.Guestlist, include: [
-                    {model: req.models.Party}
-                ]
-            }
+                model: req.models.Party
+            },
+            'eingeladenuser'
+
         ]
     }).then((user) => {
 //        console.log(user);
