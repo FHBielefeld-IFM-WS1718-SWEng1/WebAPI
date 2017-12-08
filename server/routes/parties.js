@@ -46,22 +46,15 @@ router.get('/', function (req, res, next) {
             }
         ]
     }).then((user) => {
-        console.log(user);
-    }).catch((err) => next(err));
-    // durchsuchen aller Partys wo der User Gast ist
-    req.models.Guestlist.findAll({where: {user_id: req.userid}}).then((resultsGuest) => {
-        var array2 = []
-        resultsGuest.forEach((eintrag) => array2.push(eintrag));
-        req.models.Party.findAll({
-            where: {
-                user_ID: req.userid,
-                id: array2
-            }
-        }).then((resultPartysErsteller) => {
-            resultPartysErsteller.forEach((eintrag) => array.push(eintrag));
-            res.status(200);
-            res.json(array);
-        }).catch((err) => next(err));
+//        console.log(user);
+        let partys = [];
+        user.Parties.forEach((value, key) => {
+            console.log(key + " ; " + value);
+            partys.push(value.dataValues)
+        });
+        res.status(200);
+        res.json({count: partys.length, partys: partys});
+
     }).catch((err) => next(err));
 });
 
