@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const util = require('../auth/utilities');
 
 // Tempörere Lösung anstelle von der Datenbank!
 var temp = {name: "Liste aller User", values: []};
@@ -52,8 +53,16 @@ router.get('/:id', function (req, res, next) {
 
 /* PUT user listing. */
 router.put('/:id', function (req, res, next) {
-    if ("id" in req.params && req.params.id) {
+    if (util.hasKey(req.params,"id")) {
         var id = req.params.id;
+        req.models.user.findById(id)
+            .then(result => {
+                if(result){
+                    
+                }
+            })
+            .catch(err => next(err));
+        /*var id = req.params.id;
         // nein dies ist nicht die entgültige Form des Put Requests
         req.models.User.update(req.body, {where: {id: id}}).then(result => {
             req.models.User.findById(id).then((result) => {
@@ -67,9 +76,9 @@ router.put('/:id', function (req, res, next) {
         }).catch(err => {
             res.status(400);
             res.json(err);
-        });
+        });*/
     } else {
-        res.json({id: "missing", name: "get"});
+        next({status:400, id: "missing", name: "get"});
     }
 });
 
