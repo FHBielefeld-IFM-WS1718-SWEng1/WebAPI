@@ -58,7 +58,17 @@ router.put('/:id', function (req, res, next) {
         req.models.user.findById(id)
             .then(result => {
                 if(result){
-                    
+                    util.changeValueIfExists(result, req.body,"name");
+                    util.changeValueIfExists(result,req.body, "birthdate");
+                    util.changeValueIfExists(result,req.body,"loginAt");
+                    util.changeValueIfExists(result,req.body,"updatedAt");
+                    result.save().then(result =>{
+                        res.status(200);
+                        res.json(result);
+                    }).catch(err=> next(err));
+                }
+                else {
+                    next({status:400,message:"Kein Element mit dieser ID gefunden.!"});
                 }
             })
             .catch(err => next(err));
@@ -78,7 +88,7 @@ router.put('/:id', function (req, res, next) {
             res.json(err);
         });*/
     } else {
-        next({status:400, id: "missing", name: "get"});
+        next({status:400, id: "missing", name: "id"});
     }
 });
 
