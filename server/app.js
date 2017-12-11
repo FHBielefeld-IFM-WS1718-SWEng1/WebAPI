@@ -29,6 +29,8 @@ if (process.env.NODE_ENV === 'dev') {
         .sync({force: true})
         .then(function (err) {
             console.log("Datenbank wurde erfolgreich neuerstellt!");
+            models.User.create({name:"test", email:"test@test.de", password:"lsrjXOipsCRBeL8o5JZsLOG4OFcjqWprg4hYzdbKCh4="});
+            models.APIKey.create({user_id:1, apiKey:"C5zTe3jJ3F54Zk4mPEty8-xTDvf4R51eFx0pRfB8VhA"});
         }, function (err) {
             console.log('Beim erstellen der Datenbank ist folgender Fehler aufgetretten:', err);
         });

@@ -38,18 +38,24 @@ router.get('/', function (req, res, next) {
     var array = [];
     req.models.User.findById(req.userid, {
         include: [
+            req.models.Party,
             {
-                model: req.models.Party
-            },
-            'eingeladenuser'
-
+                model: req.models.Guestlist, include: [
+                    req.models.Party
+                ]
+            }
         ]
     }).then((user) => {
-//        console.log(user);
+        console.log(user);
         let partys = [];
         user.Parties.forEach((value, key) => {
             console.log(key + " ; " + value);
-            partys.push(value.dataValues)
+            value.dataValues.ersteller = true;
+            partys.push(value.dataValues);
+        });
+        user.Guestlists.forEach((value)=>{
+            value.dataValues.ersteller = false;
+            partys.push(value.dataValues);
         });
         res.status(200);
         res.json({count: partys.length, partys: partys});
