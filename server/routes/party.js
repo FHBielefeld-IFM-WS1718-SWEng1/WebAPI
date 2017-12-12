@@ -5,13 +5,13 @@ const util = require('../auth/utilities');
 // TODO Route zum anlegen neuer einträge entwickeln
 router.post('/', function (req, res, next) {
     if (util.hasKey(req.body, "name") &&
-        util.hasKey(req.body, "startdate") &&
+        util.hasKey(req.body, "startDate") &&
         util.hasKey(req.body, "location")) {
 
         let entry = {};
 
         entry.name = req.body.name;
-        entry.startdate = req.body.startdate;
+        entry.startDate = req.body.startDate;
         entry.location = req.body.location;
         entry.user_id = req.userid;
 
@@ -38,22 +38,27 @@ router.get('/', function (req, res, next) {
     var array = [];
     req.models.User.findById(req.userid, {
         include: [
-            {model: req.models.Party},
+            req.models.Party,
             {
                 model: req.models.Guestlist, include: [
-                    {model: req.models.Party}
+                    req.models.Party
                 ]
             }
         ]
     }).then((user) => {
-//        console.log(user);
-        let partys = [];
+        console.log(user);
+        let parties = [];
         user.Parties.forEach((value, key) => {
             console.log(key + " ; " + value);
-            partys.push(value.dataValues)
+            value.dataValues.ersteller = true;
+            parties.push(value.dataValues);
+        });
+        user.Guestlists.forEach((value) => {
+            value.dataValues.ersteller = false;
+            parties.push(value.dataValues);
         });
         res.status(200);
-        res.json({count: partys.length, partys: partys});
+        res.json({count: parties.length, parties: parties});
 
     }).catch((err) => next(err));
 });
