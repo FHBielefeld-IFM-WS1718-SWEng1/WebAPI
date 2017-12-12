@@ -5,13 +5,13 @@ const util = require('../auth/utilities');
 // TODO Route zum anlegen neuer einträge entwickeln
 router.post('/', function (req, res, next) {
     if (util.hasKey(req.body, "name") &&
-        util.hasKey(req.body, "startdate") &&
+        util.hasKey(req.body, "startDate") &&
         util.hasKey(req.body, "location")) {
 
         let entry = {};
 
         entry.name = req.body.name;
-        entry.startdate = req.body.startdate;
+        entry.startDate = req.body.startDate;
         entry.location = req.body.location;
         entry.user_id = req.userid;
 
