@@ -58,10 +58,9 @@ router.put('/:id', function (req, res, next) {
         req.models.User.findById(id)
             .then(result => {
                 if(result){
-                    util.changeValueIfExists(result, req.body,"name");
+                    util.changeValueIfExists(result,req.body,"name");
                     util.changeValueIfExists(result,req.body, "birthdate");
-                    util.changeValueIfExists(result,req.body,"loginAt");
-                    util.changeValueIfExists(result,req.body,"updatedAt");
+                    util.changeValueIfExists(result,req.body, "gender");
                     result.save().then(result =>{
                         res.status(200);
                         res.json(result);
@@ -72,21 +71,6 @@ router.put('/:id', function (req, res, next) {
                 }
             })
             .catch(err => next(err));
-        /*var id = req.params.id;
-        // nein dies ist nicht die entgültige Form des Put Requests
-        req.models.User.update(req.body, {where: {id: id}}).then(result => {
-            req.models.User.findById(id).then((result) => {
-                res.status(200);
-                delete result.dataValues.password;
-                res.json(result);
-            }).catch((err) => {
-                res.status(400);
-                res.json(err)
-            });
-        }).catch(err => {
-            res.status(400);
-            res.json(err);
-        });*/
     } else {
         next({status:400, id: "missing", name: "id"});
     }
