@@ -47,18 +47,18 @@ router.get('/', function (req, res, next) {
         ]
     }).then((user) => {
         console.log(user);
-        let partys = [];
+        let parties = [];
         user.Parties.forEach((value, key) => {
             console.log(key + " ; " + value);
             value.dataValues.ersteller = true;
-            partys.push(value.dataValues);
+            parties.push(value.dataValues);
         });
-        user.Guestlists.forEach((value)=>{
+        user.Guestlists.forEach((value) => {
             value.dataValues.ersteller = false;
-            partys.push(value.dataValues);
+            parties.push(value.dataValues);
         });
         res.status(200);
-        res.json({count: partys.length, partys: partys});
+        res.json({count: parties.length, parties: parties});
 
     }).catch((err) => next(err));
 });
