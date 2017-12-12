@@ -21,6 +21,17 @@ describe.skip('logout', () => {
                     done();
                 });
         });
-        it('delete mit falschem p');
+        it('delete mit falschem apikey', (done) => {
+            chai.request(server)
+                .post('/login')
+                .send({email:"fischer@fisch.de", password: "test"})
+                .delete('/logout')
+                .end(funktion (err,res){
+                    expect(res).to.have.status(401);
+                    expect(res).to.be.json;
+                    object = res.body;
+                    done();
+            })
+        });
     });
 });
