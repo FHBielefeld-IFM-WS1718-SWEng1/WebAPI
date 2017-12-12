@@ -24,11 +24,6 @@ var exports = module.exports = function (sequelize, Sequelize) {
     bindbi(temp.User, temp.Party, 'user_id');
     bindbi(temp.User, temp.APIKey, 'user_id');
 
-    temp.User.hasMany(temp.Contactlist, {as: "userA", foreignKey:"user_id1"});
-    temp.User.hasMany(temp.Contactlist, {as: "userB", foreignKey:"user_id2"});
-
-
-
     bindbi(temp.User, temp.Comment, 'user_id');
     bindbi(temp.User, temp.Answer, 'user_id');
     bindbi(temp.User, temp.Task, 'user_id');
@@ -38,9 +33,6 @@ var exports = module.exports = function (sequelize, Sequelize) {
 
     bindbi(temp.User, temp.Guestlist, 'user_id');
     bindbi(temp.Party, temp.Guestlist, 'party_id');
-
-    //temp.User.belongsToMany(temp.Party, {as: 'eingeladenuser', through: {model: temp.Guestlist}, foreignKey:'user_id', unique: false});
-    //temp.Party.belongsToMany(temp.User, {as: 'eingeladenparty', through: {model: temp.Guestlist, foreignKey:'party_id'}, unique: false});
 
     bindbi(temp.Party, temp.Comment, 'party_id');
     bindbi(temp.Party, temp.Calculationitem, 'party_id');
