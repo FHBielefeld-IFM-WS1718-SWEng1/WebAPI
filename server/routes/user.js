@@ -55,7 +55,7 @@ router.get('/:id', function (req, res, next) {
 router.put('/:id', function (req, res, next) {
     if (util.hasKey(req.params,"id")) {
         var id = req.params.id;
-        req.models.user.findById(id)
+        req.models.User.findById(id)
             .then(result => {
                 if(result){
                     util.changeValueIfExists(result, req.body,"name");
