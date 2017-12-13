@@ -28,6 +28,7 @@ describe.skip('logout', () => {
                 .post('/login')
                 .send({email:"fischer@fisch.de", password: "test"})
                 .delete('/logout')
+                .field('api','falscherApiKeyHier')
                 .end(function (err,res){
                     assert.exists(res);
                     expect(res).to.have.status(401);
@@ -38,6 +39,12 @@ describe.skip('logout', () => {
     });
 
 });
+
+/**
+ * Die Methode holt sich den ApiKey mithilfe der Emailadresse
+ * @param eMail die Emailadresse
+ * @returns {apiKey} man braucht den ApiKey
+ */
 function getAPI(eMail){
     if(eMail !=null){
         models.User.findOne({where:{email:eMail}})
@@ -48,12 +55,12 @@ function getAPI(eMail){
                             return res.dataValues.apiKey;
                         })
                         .catch((err) => {
-                            console.log(err.toString());
+                            console.log({name:"der User ist nicht angemeldet",message:err.toString()});
                         });
                 }
             })
             .catch((err) =>{
-                console.log(err.toString());
+                console.log({name:"es gibt keinen User mit der Emailadresse",message:err.toString()});
             });
     }
     return null;
