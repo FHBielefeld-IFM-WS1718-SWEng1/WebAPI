@@ -9,6 +9,11 @@ const parties = require('./routes/party');  // Das erste Routen Module
 const users = require('./routes/user');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
+const todolist = require('./routes/todolist');
+const contactlist = require('./routes/contactlist');
+const guestlist = require('./routes/guestlist');
+const tasklist = require('./routes/tasklist');
+const rating = require('./routes/Rating');
 // Globale Variablen
 var config = require('../databaseconfig.json');
 
@@ -69,7 +74,12 @@ app.use(async function (req, res, next) {
 });
 // Hier werden die Routen eingetragen die Login erfordern
 app.use('/logout', logout);
+app.use('/user/contact', contactlist);
 app.use('/user', users);
+app.use('/party/guest', guestlist);
+app.use('/party/rating', rating);
+app.use('/party/todo', todolist);
+app.use('/party/task', tasklist);
 app.use('/party', parties);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
