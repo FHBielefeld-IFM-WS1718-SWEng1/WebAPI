@@ -21,9 +21,32 @@ router.post('/', (req, res, next) => {
             }
         }).catch(err => next(err));
     } else {
-        next({status: 400 , message: "Diie Parameter partyid und userid werden im Boy benötigt!"});     
+        next({status: 400, message: "Diie Parameter partyid und userid werden im Boy benötigt!"});
     }
 });
 
+// TODO Einladung bestätigen oder ablehnen!
+router.put('/', (req, res, next) => {
+    if (util.hasKey(req.body, 'partyid') && util.hasKey(req.body, 'userid') && util.hasKey(req.body, 'status')) {
+        req.models.Guestlist.find({where: {party_id: req.body.partyid, user_id: req.body.userid}}).then(result => {
+            if (result) {
+                result.status = req.body.status;
+                result.save()
+                    .then(result => next({
+                        status: 200,
+                        message: "Es wurde der status der einladung erfolgreich abgeändert!"
+                    }))
+                    .catch(err => next(err));
+            } else {
+                next({status: 400, message: "es wurde keine Einladung gefunden von dem User zu der Party!"})
+            }
+        }).catch(err => {console.error("Party");next(err);});
+    } else {
+        next({
+            status: 400,
+            message: 'Es wurde einer der bnötigten Parameter nicht mit übergeben! partyid, userid, status'
+        });
+    }
+});
 
 module.exports = router;
