@@ -10,6 +10,7 @@ const users = require('./routes/user');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const contactlist = require('./routes/contactlist');
+const rating = require('./routes/Rating');
 // Globale Variablen
 var config = require('../databaseconfig.json');
 
@@ -72,6 +73,7 @@ app.use(async function (req, res, next) {
 app.use('/logout', logout);
 app.use('/user/contact', contactlist);
 app.use('/user', users);
+app.use('/party/rating', rating);
 app.use('/party', parties);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
