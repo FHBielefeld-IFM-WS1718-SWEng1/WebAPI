@@ -23,9 +23,7 @@ var exports = module.exports = function (sequelize, Sequelize) {
     // Relationen
     bindbi(temp.User, temp.Party, 'user_id');
     bindbi(temp.User, temp.APIKey, 'user_id');
-    bindbi(temp.User, temp.Contactlist, 'user_id1');
-    bindbi(temp.User, temp.Contactlist, 'user_id2');
-    bindbi(temp.User, temp.Guestlist, 'user_id');
+
     bindbi(temp.User, temp.Comment, 'user_id');
     bindbi(temp.User, temp.Answer, 'user_id');
     bindbi(temp.User, temp.Task, 'user_id');
@@ -33,7 +31,9 @@ var exports = module.exports = function (sequelize, Sequelize) {
     bindbi(temp.User, temp.Voting, 'user_id');
     bindbi(temp.User, temp.Rating, 'user_id');
 
+    bindbi(temp.User, temp.Guestlist, 'user_id');
     bindbi(temp.Party, temp.Guestlist, 'party_id');
+
     bindbi(temp.Party, temp.Comment, 'party_id');
     bindbi(temp.Party, temp.Calculationitem, 'party_id');
     bindbi(temp.Party, temp.Task, 'party_id');
