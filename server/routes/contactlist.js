@@ -45,10 +45,12 @@ router.get('/', (req, res, next) => {
 });
 
 router.delete('/', (req, res, next) => {
+    if (util.hasKey(req.body, 'id')) {
 
-    req.models.Contactlist.destroy({
-        where:
-            {
+
+        req.models.Contactlist.destroy({
+            where:
+                {
                 $or: [
                     {
                         $and: [{
@@ -85,8 +87,11 @@ router.delete('/', (req, res, next) => {
         res.status(200);
         res.json({message: "erfolg", items: result});
     }).catch(err => {
-        console.error(err);
-        next(err)
-    });
+            console.error(err);
+            next(err)
+        });
+    } else {
+        next({status: 400, message: "Es wird eine Id beim request benötigt!"})
+    }
 });
 module.exports = router;
