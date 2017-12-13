@@ -14,24 +14,47 @@ describe.skip('logout', () => {
                 .post('/login')
                 .send({email:"fischer@fisch.de", password: "test"})
                 .delete('/logout')
+                .field('api',getAPI("fischer@fisch.de"))
                 .end(function (err, res) {
                     expect(res).to.have.status(200);
-                    expect(res).to.be.json;
+                    res.should.be.an('json');
                     object = res.body;
                     done();
                 });
         });
+        // hier der Test mit falschem ApiKey
         it('delete mit falschem apikey', (done) => {
             chai.request(server)
                 .post('/login')
                 .send({email:"fischer@fisch.de", password: "test"})
                 .delete('/logout')
-                .end(funktion (err,res){
+                .end(function (err,res){
+                    assert.exists(res);
                     expect(res).to.have.status(401);
-                    expect(res).to.be.json;
                     object = res.body;
                     done();
-            })
+                });
         });
     });
+
 });
+function getAPI(eMail){
+    if(eMail !=null){
+        models.User.findOne({where:{email:eMail}})
+            .then((results) => {
+                if(results!=null){
+                    models.APIKey.findOne({where:{user_id:results.dataValues.id}})
+                        .then((res) =>{
+                            return res.dataValues.apiKey;
+                        })
+                        .catch((err) => {
+                            console.log(err.toString());
+                        });
+                }
+            })
+            .catch((err) =>{
+                console.log(err.toString());
+            });
+    }
+    return null;
+}
