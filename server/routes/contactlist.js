@@ -39,18 +39,14 @@ router.get('/', (req, res, next) => {
         res.status(200);
         res.json(ret);
     }).catch(err => {
-        console.error(err);
         next(err)
     });
 });
 
-router.delete('/', (req, res, next) => {
-    if (util.hasKey(req.body, 'id')) {
-
-
-        req.models.Contactlist.destroy({
-            where:
-                {
+router.put('/', (req, res, next) => {
+    if (util.hasKey(req.body, 'userid')) {
+        req.models.Contactlist.find({
+            where: {
                 $or: [
                     {
                         $and: [{
@@ -58,10 +54,10 @@ router.delete('/', (req, res, next) => {
                                 {
                                     $eq: req.userid
                                 }
-                        },{
+                        }, {
                             user_id2:
                                 {
-                                    $eq: req.body.id
+                                    $eq: req.body.userid
                                 }
                         }]
                     },
@@ -71,7 +67,7 @@ router.delete('/', (req, res, next) => {
                                 {
                                     $eq: req.body.userid
                                 }
-                        },{
+                        }, {
                             user_id2:
                                 {
                                     $eq: req.userid
@@ -79,14 +75,68 @@ router.delete('/', (req, res, next) => {
                         }]
                     }
                 ]
-            },
-        include: {
-            model: req.models.User
-        }
-    }).then((result) => {
-        res.status(200);
-        res.json({message: "erfolg", items: result});
-    }).catch(err => {
+            }
+        }).then(result => {
+            if (result) {
+                util.changeValueIfExists(result, req.body, 'status');
+                result.save().then((res2) => {
+                    res.status(200);
+                    res.json({message: "erfolg"});
+                }).catch(err => next(err));
+            } else {
+                next({status: 400, message: "Kein eintrag mit dieser ID!"});
+            }
+        }).catch(err => next(err));
+    } else {
+        next({status: 400, message: "Keine userid übergeben!"})
+    }
+
+});
+
+
+router.delete('/', (req, res, next) => {
+    if (util.hasKey(req.body, 'id')) {
+
+
+        req.models.Contactlist.destroy({
+            where:
+                {
+                    $or: [
+                        {
+                            $and: [{
+                                user_id1:
+                                    {
+                                        $eq: req.userid
+                                    }
+                            }, {
+                                user_id2:
+                                    {
+                                        $eq: req.body.id
+                                    }
+                            }]
+                        },
+                        {
+                            $and: [{
+                                user_id1:
+                                    {
+                                        $eq: req.body.userid
+                                    }
+                            }, {
+                                user_id2:
+                                    {
+                                        $eq: req.userid
+                                    }
+                            }]
+                        }
+                    ]
+                },
+            include: {
+                model: req.models.User
+            }
+        }).then((result) => {
+            res.status(200);
+            res.json({message: "erfolg", items: result});
+        }).catch(err => {
             console.error(err);
             next(err)
         });
