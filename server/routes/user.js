@@ -5,31 +5,6 @@ const util = require('../auth/utilities');
 // Tempörere Lösung anstelle von der Datenbank!
 var temp = {name: "Liste aller User", values: []};
 
-/* GET user listing. */
-router.get('/:id', function (req, res, next) {
-        if ("id" in req.params && req.params.id) {
-            var id = req.params.id;
-            req.models.User.findById(id)
-                .then((user) => {
-                    if (user) {
-                        delete user.dataValues.password;
-                        res.status(200);
-                        res.json(user);
-                    } else {
-                        res.status(400);
-                        res.json({error: "Kein User mit der ID " + id});
-                    }
-                }).catch((error) => {
-                    next(error);
-                }
-            );
-        } else {
-            res.status(404);
-            res.json({id: "missing", name: "get"});
-        }
-    }
-);
-
 /* PUT user listing. */
 router.put('/:id', function (req, res, next) {
     if (util.hasKey(req.params,"id")) {
