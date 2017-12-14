@@ -5,27 +5,6 @@ const util = require('../auth/utilities');
 // Tempörere Lösung anstelle von der Datenbank!
 var temp = {name: "Liste aller User", values: []};
 
-
-// POST
-router.post('/', function (req, res, next) {
-    if ("email" in req.body && "name" in req.body && "password" in req.body) {
-        req.models.User.create({
-            name: req.body.name,
-            password: req.body.password,
-            email: req.body.email
-        }).then((results) => {
-            if (results) {
-                delete results.dataValues['password'];
-                res.json(results.dataValues);
-            }
-        }).catch(error => {
-            console.log(error);
-        });
-    } else {
-        res.json({error: 400, text: "Das übergebene Element ist für diesen Request ungültig!"});
-    }
-});
-
 /* GET user listing. */
 router.get('/:id', function (req, res, next) {
         if ("id" in req.params && req.params.id) {
