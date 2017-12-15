@@ -10,28 +10,17 @@ describe.skip('logout', () => {
     // Man Darf nur Logout mit delete aufrufen
     describe('DELETE', () => {
         it('es ist erlaubt einen DELETE auszuführen', (done) => {
+            let mail = "fischer@fisch.de";
+            let pwd = "test";
             chai.request(server)
                 .post('/login')
-                .send({email:"fischer@fisch.de", password: "test"})
+                .send({email:mail, password: pwd}).then((result)=> {setAPI(mail);})
                 .delete('/logout')
-                .field('api',getAPI("fischer@fisch.de"))
+                .query('api','test')
                 .end(function (err, res) {
                     expect(res).to.have.status(200);
-                    res.should.be.an('json');
-                    object = res.body;
-                    done();
-                });
-        });
-        // hier der Test mit falschem ApiKey
-        it('delete mit falschem apikey', (done) => {
-            chai.request(server)
-                .post('/login')
-                .send({email:"fischer@fisch.de", password: "test"})
-                .delete('/logout')
-                .field('api','falscherApiKeyHier')
-                .end(function (err,res){
-                    assert.exists(res);
-                    expect(res).to.have.status(401);
+                    expect(err).to.equal.null;
+                    expect(res).to.be.an('json');
                     object = res.body;
                     done();
                 });
@@ -45,23 +34,21 @@ describe.skip('logout', () => {
  * @param eMail die Emailadresse
  * @returns {apiKey} man braucht den ApiKey
  */
-function getAPI(eMail){
-    if(eMail !=null){
-        models.User.findOne({where:{email:eMail}})
-            .then((results) => {
-                if(results!=null){
-                    models.APIKey.findOne({where:{user_id:results.dataValues.id}})
-                        .then((res) =>{
-                            return res.dataValues.apiKey;
-                        })
-                        .catch((err) => {
-                            console.log({name:"der User ist nicht angemeldet",message:err.toString()});
-                        });
-                }
-            })
-            .catch((err) =>{
-                console.log({name:"es gibt keinen User mit der Emailadresse",message:err.toString()});
-            });
-    }
-    return null;
+function setAPI(eMail){
+    models.User.findOne({where:{email:eMail}})
+        .then((results) => {
+            if(results!=null){
+                models.APIKey.findOne({where:{user_id:results.dataValues.id}})
+                    .then((res) =>{
+                        //hier wird der ApiKey des Users geaendert
+                        res.dataValues.apiKey = test;
+                    })
+                    .catch((err) => {
+                        console.log({name:"der User ist nicht angemeldet",message:err.toString()});
+                    });
+            }
+        })
+        .catch((err) =>{
+            console.log({name:"es gibt keinen User mit der Emailadresse",message:err.toString()});
+        });
 }
