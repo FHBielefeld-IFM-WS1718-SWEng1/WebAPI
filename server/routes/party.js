@@ -64,6 +64,9 @@ router.get('/', function (req, res, next) {
 // TODO Route zum anzeigen einer speziellen Party an welche der User Teilnehmen kann oder mitglied ist!
 router.get('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
+        if(typeof req.params.id === number){
+            next();
+        }
         req.models.Party.findById(req.params.id)
             .then((result) => {
                 if (result) {
