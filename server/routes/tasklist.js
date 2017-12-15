@@ -17,7 +17,17 @@ router.post('/', (req, res, next) => {
             next({status: 400, message: "Kein Datensatz wurde angelegt"});
         }
     }).catch(err => next(err));
+});
 
+router.delete('/', (req, res, next) => {
+    req.models.Task.destroy({where: {userid: req.body.id}}).then(value => {
+        if (value) {
+            res.status(200);
+            res.json(value);
+        } else {
+            next({status: 400, message: "Mir egal was ihr macht das funktioniert nicht!"});
+        }
+    }).catch(err => next(err));
 });
 
 module.exports = router;
