@@ -52,4 +52,11 @@ router.delete('/:id', function (req, res, next) {
     }
 });
 
+/* GET user listing. Mit aenderung, zurückgegeben wird nur name email und id
+ *  zurück gegeben werden alle User
+ */
+router.get('/', function (req, res, next) {
+    res.status(200);
+    res.json();
+});
 module.exports = router;
