@@ -19,6 +19,22 @@ router.post('/', (req, res, next) => {
     }).catch(err => next(err));
 });
 
+router.put('/', (req, res, next) => {
+    req.models.Task.findById(req.body.id)
+        .then(value => {
+            util.changeValueIfExists(value, req.body, 'text');
+            util.changeValueIfExists(value, req.body, 'status');
+            value.save().then(value2 => {
+                if (value2) {
+                    res.status(200);
+                    res.json(value2);
+                } else {
+                    next({status: 400, message: "Keine Änderungen in der DB"});
+                }
+            }).catch(err => next(err));
+        }).catch(err => next(err));
+});
+
 router.delete('/', (req, res, next) => {
     req.models.Task.destroy({where: {userid: req.body.id}}).then(value => {
         if (value) {
