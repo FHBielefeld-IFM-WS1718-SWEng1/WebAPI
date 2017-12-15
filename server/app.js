@@ -3,6 +3,7 @@ var logger = require('morgan');     // Logger für Requests
 const bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
 const checkToken = require('./auth/authenticate');
 const Sequelize = require('sequelize');
+const cors = require('cors');
 // alle routen importieren
 const register = require('./routes/register');
 const parties = require('./routes/party');  // Das erste Routen Module
@@ -23,7 +24,7 @@ const app = express();                // erstellen einer Express Node.js Applica
 
 const page404 = (req, res, next) => next({status: 404});
 
-
+app.use(cors());
 // app.use(logger('dev'));
 app.use(bodyParser.json());                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
