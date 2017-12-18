@@ -34,7 +34,6 @@ router.post('/', function (req, res, next) {
 router.get('/', function (req, res, next) {
     // nach überlegungen wäre es vielleicht besser wenn das Frontend einfach auch den User mit angibt ... dennoch war in der besprechung gesagt worden, dass das Frontend einfach nur den APIKey schmeist
     // somit müssen wir den User finden dem der APIKey gehört
-    console.log("Partie PArtie");
     var array = [];
     req.models.User.findById(req.userid, {
         include: [
@@ -46,10 +45,8 @@ router.get('/', function (req, res, next) {
             }
         ]
     }).then((user) => {
-        console.log(user);
         let parties = [];
         user.Parties.forEach((value, key) => {
-            console.log(key + " ; " + value);
             value.dataValues.ersteller = true;
             parties.push(value.dataValues);
         });
@@ -67,6 +64,9 @@ router.get('/', function (req, res, next) {
 // TODO Route zum anzeigen einer speziellen Party an welche der User Teilnehmen kann oder mitglied ist!
 router.get('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
+        if(typeof req.params.id === number){
+            next();
+        }
         req.models.Party.findById(req.params.id)
             .then((result) => {
                 if (result) {

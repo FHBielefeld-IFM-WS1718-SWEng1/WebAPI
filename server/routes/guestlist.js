@@ -40,12 +40,28 @@ router.put('/', (req, res, next) => {
             } else {
                 next({status: 400, message: "es wurde keine Einladung gefunden von dem User zu der Party!"})
             }
-        }).catch(err => {console.error("Party");next(err);});
+        }).catch(err => {
+            console.error("Party");
+            next(err);
+        });
     } else {
         next({
             status: 400,
             message: 'Es wurde einer der bnötigten Parameter nicht mit übergeben! partyid, userid, status'
         });
+    }
+});
+
+router.delete('/', (req, res, next) => {
+    if (req.body.id) {
+        req.models.Guestlist.destroy({where: {id: req.body.id}}).then(value=>{
+            if(value){
+                res.status(200);
+                res.json(value);
+            }else{
+                next({status: 400, message: undefined});
+            }
+        }).catch(err=>next(err));
     }
 });
 

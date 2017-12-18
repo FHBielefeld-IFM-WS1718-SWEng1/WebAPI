@@ -37,6 +37,7 @@ router.get('/', (req, res, next) => {
             });
         }
         res.status(200);
+        ret.count = ret.contacts.length;
         res.json(ret);
     }).catch(err => {
         next(err)
