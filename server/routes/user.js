@@ -56,7 +56,18 @@ router.delete('/:id', function (req, res, next) {
  *  zurück gegeben werden alle User
  */
 router.get('/', function (req, res, next) {
-    res.status(200);
-    res.json();
+    var erg = {name: "List of all Users", values:[]};
+    req.models.User.findAll().then((result)=>{
+        if(result){
+            var temp;
+            for(var i =0;i <= result.length+1;i++){
+                temp= result.pop();
+                erg.values[i] = {name:temp.dataValues.name,email:temp.dataValues.email,id:temp.dataValues.id};
+            }
+            res.json(erg);
+            res.status(200);
+        }
+    });
+
 });
 module.exports = router;
