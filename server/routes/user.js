@@ -33,22 +33,19 @@ router.put('/:id', function (req, res, next) {
 });
 
 
-/* DELETE user listing. */
+/* DELETE user listing. Nikita*/
 router.delete('/:id', function (req, res, next) {
-    if ("id" in req.params && req.params.id) {
-
-
+    if (util.hasKey(req.params,"id")) {
         var id = req.params.id;
-        req.models.User.destroy({where: {id: id}}).then(result => {
+        req.models.User.findById(id).then((result =>{
+            //hier wird das aktuelle datum von dem geloescht atribut gesetzt
+            var d = {deletedAt:new Date()};
+            util.changeValueIfExists(result,d,"deletedAt");
             res.status(200);
-            res.json({message:"erfolg", deletedItems:result});
-
-        }).catch(err => {
-            res.status(400);
-            res.json(err)
-        })
+            res.json(result);
+        })).catch(err => next(err));
     } else {
-        res.json({id: "missing", name: "get"});
+        res.json({id: "missing", name: "id"});
     }
 });
 
@@ -67,7 +64,6 @@ router.get('/', function (req, res, next) {
             res.json(erg);
             res.status(200);
         }
-    });
-
+    }).catch(err => next(err));
 });
 module.exports = router;
