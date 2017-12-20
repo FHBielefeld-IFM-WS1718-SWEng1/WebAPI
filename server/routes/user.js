@@ -64,7 +64,10 @@ router.get('/', function (req, res, next) {
             var temp;
             for(var i =0;i <= result.length+1;i++){
                 temp= result.pop();
-                erg.values[i] = {name:temp.dataValues.name,email:temp.dataValues.email,id:temp.dataValues.id};
+                if(temp.dataValues.deletedAt == null) {
+                    erg.values[i] = temp;
+                    //erg.values[i] = {name: temp.dataValues.name, email: temp.dataValues.email, id: temp.dataValues.id};
+                }
             }
             res.json(erg);
             res.status(200);
