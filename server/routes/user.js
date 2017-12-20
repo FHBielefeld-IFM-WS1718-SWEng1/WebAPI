@@ -37,13 +37,18 @@ router.put('/:id', function (req, res, next) {
 router.delete('/:id', function (req, res, next) {
     if (util.hasKey(req.params,"id")) {
         var id = req.params.id;
-        req.models.User.findById(id).then((result =>{
-            //hier wird das aktuelle datum von dem geloescht atribut gesetzt
-            var d = {deletedAt:new Date()};
-            util.changeValueIfExists(result,d,"deletedAt");
-            res.status(200);
-            res.json(result);
-        })).catch(err => next(err));
+        req.models.User.findById(id).then((result) =>{
+            if(result) {
+                util.changeValueIfExists(result.dataValues, {deletedAt:new Date()}, "deletedAt");
+                result.save().then(erg =>{
+                    res.status(200);
+                    console.log(result.dataValues)
+                    res.json(result);
+                }).catch(err=> next(err));
+            }else{
+                next({status:400,message:"Kein Element mit dieser ID gefunden.!"});
+            }
+        }).catch(err => next(err));
     } else {
         res.json({id: "missing", name: "id"});
     }
