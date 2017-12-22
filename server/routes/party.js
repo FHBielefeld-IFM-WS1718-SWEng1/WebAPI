@@ -67,11 +67,36 @@ router.get('/:id', function (req, res, next) {
         if(typeof req.params.id === 'number'){
             next();
         }
-        req.models.Party.findById(req.params.id,{include:[{model:req.models.Task, include:req.models.User}, {model: req.models.Todolistitem}, {model: req.models.Guestlist, include: req.models.User}]} )
+        req.models.Party.findById(req.params.id,{include:[{model:req.models.Task, include:req.models.User}, {model: req.models.Todolistitem}, {model: req.models.Guestlist, include: req.models.User}, {model: req.models.User}]} )
             .then((result) => {
                 if (result) {
+                    let retval = {};
+                    retval.id = result.id;
+                    retval.name = result.name;
+                    retval.description = result.description;
+                    retval.startDate = result.startDate;
+                    retval.endDate = result.endDate;
+                    retval.ersteller = result.User;
+                    util.removeKeysFromUser(retval.ersteller);
+                    retval.tasks = [];
+                    result.Tasks.forEach((value)=>{
+                        util.removeTimeStamp(value.dataValues);
+                        util.removeKeysFromUser(value.dataValues.User.dataValues);
+                        retval.tasks.push(value.dataValues);
+                    });
+                    retval.todo = [];
+                    result.Todolistitems.forEach((value)=>{
+                        util.removeTimeStamp(value.dataValues);
+                       retval.todo.push(value.dataValues);
+                    });
+                    util.removeTimeStamp(retval);
+                    retval.guests = [];
+                    result.Guestlists.forEach((value)=>{
+                        util.removeTimeStamp(value.dataValues);
+                        retval.guests.push(value.dataValues);
+                    });
                     res.status(200);
-                    res.json(result);
+                    res.json(retval);
                 } else {
                     next({status: 400, message: "Keine Partie mit der id " + req.params.id})
                 }
