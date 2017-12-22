@@ -34,40 +34,70 @@ router.post('/', function (req, res, next) {
 router.get('/', function (req, res, next) {
     // nach überlegungen wäre es vielleicht besser wenn das Frontend einfach auch den User mit angibt ... dennoch war in der besprechung gesagt worden, dass das Frontend einfach nur den APIKey schmeist
     // somit müssen wir den User finden dem der APIKey gehört
-    var array = [];
-    req.models.User.findById(req.userid, {
-        include: [
-            req.models.Party,
-            {
+    let creator = true;
+    let guest = true;
+    console.log(req.query);
+    if (util.hasKey(req.query, 'creator')) {
+        creator = req.query.creator;
+    }
+    if (util.hasKey(req.query, 'guest')) {
+        guest = req.query.guest;
+    }
+    if (creator === false && guest === false) {
+        res.status(200);
+        res.json({});
+    } else {
+        let includes = [];
+        if (creator === true) {
+            includes.push(req.models.Party);
+        }
+        if (guest === true) {
+            includes.push({
                 model: req.models.Guestlist, include: [
                     req.models.Party
                 ]
+            });
+        }
+        req.models.User.findById(req.userid, {
+            include: includes
+        }).then((user) => {
+            let parties = [];
+            if (creator === true) {
+                user.Parties.forEach((value, key) => {
+                    value.dataValues.ersteller = true;
+                    parties.push(value.dataValues);
+                });
             }
-        ]
-    }).then((user) => {
-        let parties = [];
-        user.Parties.forEach((value, key) => {
-            value.dataValues.ersteller = true;
-            parties.push(value.dataValues);
-        });
-        user.Guestlists.forEach((value) => {
-            value.dataValues.ersteller = false;
-            parties.push(value.dataValues);
-        });
-        res.status(200);
-        res.json({count: parties.length, parties: parties});
+            if (guest === true) {
+                user.Guestlists.forEach((value) => {
+                    value.dataValues.Party.ersteller = false;
+                    parties.push(value.dataValues.Party);
+                });
+            }
 
-    }).catch((err) => next(err));
+            res.status(200);
+            res.json({count: parties.length, parties: parties});
+
+        }).catch((err) => next(err));
+    }
 });
 
 /* GET parties listing. */
 // TODO Route zum anzeigen einer speziellen Party an welche der User Teilnehmen kann oder mitglied ist!
 router.get('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
-        if(typeof req.params.id === 'number'){
+        if (typeof req.params.id === 'number') {
             next();
         }
-        req.models.Party.findById(req.params.id,{include:[{model:req.models.Task, include:req.models.User}, {model: req.models.Todolistitem}, {model: req.models.Guestlist, include: req.models.User}, {model: req.models.User}]} )
+        req.models.Party.findById(req.params.id, {
+            include: [{
+                model: req.models.Task,
+                include: req.models.User
+            }, {model: req.models.Todolistitem}, {
+                model: req.models.Guestlist,
+                include: req.models.User
+            }, {model: req.models.User}]
+        })
             .then((result) => {
                 if (result) {
                     let retval = {};
@@ -79,19 +109,19 @@ router.get('/:id', function (req, res, next) {
                     retval.ersteller = result.User;
                     util.removeKeysFromUser(retval.ersteller);
                     retval.tasks = [];
-                    result.Tasks.forEach((value)=>{
+                    result.Tasks.forEach((value) => {
                         util.removeTimeStamp(value.dataValues);
                         util.removeKeysFromUser(value.dataValues.User.dataValues);
                         retval.tasks.push(value.dataValues);
                     });
                     retval.todo = [];
-                    result.Todolistitems.forEach((value)=>{
+                    result.Todolistitems.forEach((value) => {
                         util.removeTimeStamp(value.dataValues);
-                       retval.todo.push(value.dataValues);
+                        retval.todo.push(value.dataValues);
                     });
                     util.removeTimeStamp(retval);
                     retval.guests = [];
-                    result.Guestlists.forEach((value)=>{
+                    result.Guestlists.forEach((value) => {
                         util.removeTimeStamp(value.dataValues);
                         retval.guests.push(value.dataValues);
                     });
