@@ -5,7 +5,7 @@ module.exports = (function (sequelize, Sequelize) {
         name: {type: Sequelize.STRING(50), field: 'Name', allowNull: false},
         password: {type: Sequelize.STRING(50), field: 'Password', allowNull: false},
         birthdate: {type: Sequelize.DATE, field: 'Birthdate'},
-        gender: {type: Sequelize.STRING(5), field: 'Gender'},
+        gender: {type: Sequelize.INTEGER, field: 'Gender'},
         profilepicture: {type: Sequelize.STRING(100), field: 'Profilepicture'},
         loginAt: {type: Sequelize.DATE, field: 'LoginAt'},
         createdAt: {type: Sequelize.DATE, field: 'CreatedAt'},
