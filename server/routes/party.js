@@ -64,10 +64,10 @@ router.get('/', function (req, res, next) {
 // TODO Route zum anzeigen einer speziellen Party an welche der User Teilnehmen kann oder mitglied ist!
 router.get('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
-        if(typeof req.params.id === number){
+        if(typeof req.params.id === 'number'){
             next();
         }
-        req.models.Party.findById(req.params.id)
+        req.models.Party.findById(req.params.id,{include:[{model:req.models.Task, include:req.models.User}, {model: req.models.Todolistitem}, {model: req.models.Guestlist, include: req.models.User}]} )
             .then((result) => {
                 if (result) {
                     res.status(200);
