@@ -34,22 +34,14 @@ router.put('/:id', function (req, res, next) {
 
 
 /* DELETE user listing. Nikita*/
+//TODO datum setzen wie bei register
 router.delete('/:id', function (req, res, next) {
     if (util.hasKey(req.params,"id")) {
         var id = req.params.id;
         req.models.User.findById(id)
             .then(result => {
                 if(result){
-                    //util.changeValueIfExists(result.dataValues,{deletedAt:new Date()},"deletedAt");
-                    console.log(result.dataValues.deletedAt);
-                    result.dataValues.deletedAt = new Date();
-                    //result.dataValues.deletedAt= new Date();
-                    console.log(result.dataValues.deletedAt);
-                    console.log(result);
-                    result.save().then(result =>{
-                        res.status(200);
-                        res.json(result);
-                    }).catch(err=> next(err));
+                    //hier wird der User gelöscht, nur nicht mit destroy
                 }
                 else {
                     next({status:400,message:"Kein Element mit dieser ID gefunden.!"});
