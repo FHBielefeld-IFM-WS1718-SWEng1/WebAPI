@@ -11,7 +11,7 @@ Bugs und Probleme werden mit der nächsten Version im Master übernommen!
 
 ## DB Skripts
 
-sind auf dem Stand vom 01.12.2017 und können wegen Datenbank Änderungen nicht mehr funktionieren!
+sind auf dem Stand vom 22.12.2017 und können wegen Datenbank Änderungen nicht mehr funktionieren!
 
 ## Tests
 
@@ -19,4 +19,6 @@ sind auf dem Stand vom 01.12.2017 und können wegen Datenbank Änderungen nicht 
 
 ## Dokumentation
 
-https://app.swaggerhub.com/apis/AHeinisch/PaPla/0.1.1#/
+https://app.swaggerhub.com/apis/AHeinisch/PaPla/
+
+
