@@ -42,6 +42,13 @@ router.delete('/:id', function (req, res, next) {
             .then(result => {
                 if(result){
                     //hier wird der User gelöscht, nur nicht mit destroy
+
+                    result.destroy().then((r)=>{
+                        result.save().then(result =>{
+                            res.status(200);
+                            res.json(result);
+                        }).catch(err=> next(err));
+                    }).catch(err=>next(err));
                 }
                 else {
                     next({status:400,message:"Kein Element mit dieser ID gefunden.!"});
@@ -49,6 +56,7 @@ router.delete('/:id', function (req, res, next) {
             })
             .catch(err => next(err));
     } else {
+        res.status(400);
         res.json({id: "missing", name: "id"});
     }
 });
