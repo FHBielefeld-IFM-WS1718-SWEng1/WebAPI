@@ -66,14 +66,14 @@ router.delete('/:id', function (req, res, next) {
  *  zurück gegeben werden alle User
  */
 router.get('/', function (req, res, next) {
-    var erg = {values:[]};
-    req.models.User.findAll().then((result)=>{
-        if(result){
-            var temp;
-            for(var i =0;i <= result.length+1;i++){
-                temp= result.pop();
-                erg.values[i] = {name: temp.dataValues.name, email: temp.dataValues.email, id: temp.dataValues.id};
-            }
+    var erg = {values: []};
+    req.models.User.findAll().then((result) => {
+        console.log(result);
+        if (result) {
+            result.forEach((user)=>{
+               erg.values.push({name:user.name, email: user.email, id: user.id});
+            });
+
             res.json(erg);
             res.status(200);
         }
