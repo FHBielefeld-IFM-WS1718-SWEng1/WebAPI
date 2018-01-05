@@ -7,28 +7,28 @@ var temp = {name: "Liste aller User", values: []};
 
 /* PUT user listing. */
 router.put('/:id', function (req, res, next) {
-    if (util.hasKey(req.params,"id")) {
+    if (util.hasKey(req.params, "id")) {
         var id = req.params.id;
         req.models.User.findById(id)
             .then(result => {
-                if(result){
-                    util.changeValueIfExists(result,req.body,"name");
-                    if(req.body.gender >= 0 && req.body.gender <=3){
-                        util.changeValueIfExists(result,req.body, "gender");
+                if (result) {
+                    util.changeValueIfExists(result, req.body, "name");
+                    if (req.body.gender >= 0 && req.body.gender <= 3) {
+                        util.changeValueIfExists(result, req.body, "gender");
                     }
-                    util.changeValueIfExists(result,req.body, "birthdate");
-                    result.save().then(result =>{
+                    util.changeValueIfExists(result, req.body, "birthdate");
+                    result.save().then(result => {
                         res.status(200);
                         res.json(result);
-                    }).catch(err=> next(err));
+                    }).catch(err => next(err));
                 }
                 else {
-                    next({status:400,message:"Kein Element mit dieser ID gefunden.!"});
+                    next({status: 400, message: "Kein Element mit dieser ID gefunden.!"});
                 }
             })
             .catch(err => next(err));
     } else {
-        next({status:400, id: "missing", name: "id"});
+        next({status: 400, id: "missing", name: "id"});
     }
 });
 
@@ -59,29 +59,29 @@ router.put('/:id', function (req, res, next) {
 /* DELETE user listing. Nikita*/
 //TODO datum setzen wie bei register
 router.delete('/:id', function (req, res, next) {
-    if (util.hasKey(req.params,"id")) {
+    if (util.hasKey(req.params, "id")) {
         var id = req.params.id;
         req.models.User.findById(id)
             .then(result => {
-                if(result){
+                if (result) {
                     //hier wird der User gelöscht, nur nicht mit destroy
-                        req.models.APIKey.findOne({where:{id : id}}).then(key=>{
-                            key.destroy();
-                        });
-                        result.destroy().then((r)=>{
-                            result.save().then(result =>{
-                                res.status(200);
-                                res.json({message:"Erfolg"});
-                            }).catch(err=> next(err));
-                        }).catch(err=>next(err));
+                    req.models.APIKey.findOne({where: {id: id}}).then(key => {
+                        key.destroy();
+                    });
+                    result.destroy().then((r) => {
+                        result.save().then(result => {
+                            res.status(200);
+                            res.json({message: "Erfolg"});
+                        }).catch(err => next(err));
+                    }).catch(err => next(err));
                 }
                 else {
-                    next({status:400,message:"Kein Element mit dieser ID gefunden!"});
+                    next({status: 400, message: "Kein Element mit dieser ID gefunden!"});
                 }
             })
             .catch(err => next(err));
     } else {
-        next({status:400,message:"Keine ID vorhanden!"});
+        next({status: 400, message: "Keine ID vorhanden!"});
     }
 });
 
@@ -93,8 +93,8 @@ router.get('/', function (req, res, next) {
     req.models.User.findAll().then((result) => {
         console.log(result);
         if (result) {
-            result.forEach((user)=>{
-               erg.values.push({name:user.name, email: user.email, id: user.id});
+            result.forEach((user) => {
+                erg.values.push({name: user.name, email: user.email, id: user.id});
             });
 
             res.json(erg);
