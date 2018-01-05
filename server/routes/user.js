@@ -43,12 +43,12 @@ router.delete('/:id', function (req, res, next) {
                 if(result){
                     //hier wird der User gelöscht, nur nicht mit destroy
 
-                    result.destroy().then((r)=>{
-                        result.save().then(result =>{
-                            res.status(200);
-                            res.json(result);
-                        }).catch(err=> next(err));
-                    }).catch(err=>next(err));
+                        result.destroy().then((r)=>{
+                            result.save().then(result =>{
+                                res.status(200);
+                                res.json({message:"Erfolg"});
+                            }).catch(err=> next(err));
+                        }).catch(err=>next(err));
                 }
                 else {
                     next({status:400,message:"Kein Element mit dieser ID gefunden.!"});
@@ -71,10 +71,7 @@ router.get('/', function (req, res, next) {
             var temp;
             for(var i =0;i <= result.length+1;i++){
                 temp= result.pop();
-                if(temp.dataValues.deletedAt == null) {
-                    erg.values[i] = temp;
-                    //erg.values[i] = {name: temp.dataValues.name, email: temp.dataValues.email, id: temp.dataValues.id};
-                }
+                erg.values[i] = {name: temp.dataValues.name, email: temp.dataValues.email, id: temp.dataValues.id};
             }
             res.json(erg);
             res.status(200);
