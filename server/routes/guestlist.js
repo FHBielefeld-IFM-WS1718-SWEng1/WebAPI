@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router();
 const util = require('../auth/utilities');
 
+/*  */
+router.get('/', (req, res, next) => {
+    req.models.Guestlist.findAll({where: {user_id: req.userid}}).then((result) => {
+        let array = [];
+        result.forEach((key) => {
+            array.push(key.dataValues);
+        });
+        res.status(200);
+        res.json({einladungen: array});
+    }).catch(err => next(err));
+});
+
 /* GET parties listing. */
 // TODO Einladung abschicken
 router.post('/', (req, res, next) => {
@@ -13,7 +25,8 @@ router.post('/', (req, res, next) => {
                 req.models.Guestlist.create({party_id: req.body.partyid, user_id: req.body.userid})
                     .then(result => {
                         if (result) {
-                            next({status: 203, message: "User wurde eingeladen!"});
+                            res.status(203);
+                            res.json({message: "User wurde eingeladen!"});
                         } else {
                             next({status: 400, message: "User wurde nicht eingeladen"});
                         }
@@ -54,14 +67,14 @@ router.put('/', (req, res, next) => {
 
 router.delete('/', (req, res, next) => {
     if (req.body.id) {
-        req.models.Guestlist.destroy({where: {id: req.body.id}}).then(value=>{
-            if(value){
+        req.models.Guestlist.destroy({where: {id: req.body.id}}).then(value => {
+            if (value) {
                 res.status(200);
                 res.json(value);
-            }else{
+            } else {
                 next({status: 400, message: undefined});
             }
-        }).catch(err=>next(err));
+        }).catch(err => next(err));
     }
 });
 

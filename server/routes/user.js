@@ -5,52 +5,6 @@ const util = require('../auth/utilities');
 // Tempörere Lösung anstelle von der Datenbank!
 var temp = {name: "Liste aller User", values: []};
 
-
-// POST
-router.post('/', function (req, res, next) {
-    if ("email" in req.body && "name" in req.body && "password" in req.body) {
-        req.models.User.create({
-            name: req.body.name,
-            password: req.body.password,
-            email: req.body.email
-        }).then((results) => {
-            if (results) {
-                delete results.dataValues['password'];
-                res.json(results.dataValues);
-            }
-        }).catch(error => {
-            console.log(error);
-        });
-    } else {
-        res.json({error: 400, text: "Das übergebene Element ist für diesen Request ungültig!"});
-    }
-});
-
-/* GET user listing. */
-router.get('/:id', function (req, res, next) {
-        if ("id" in req.params && req.params.id) {
-            var id = req.params.id;
-            req.models.User.findById(id)
-                .then((user) => {
-                    if (user) {
-                        delete user.dataValues.password;
-                        res.status(200);
-                        res.json(user);
-                    } else {
-                        res.status(400);
-                        res.json({error: "Kein User mit der ID " + id});
-                    }
-                }).catch((error) => {
-                    next(error);
-                }
-            );
-        } else {
-            res.status(404);
-            res.json({id: "missing", name: "get"});
-        }
-    }
-);
-
 /* PUT user listing. */
 router.put('/:id', function (req, res, next) {
     if (util.hasKey(req.params,"id")) {
@@ -59,8 +13,10 @@ router.put('/:id', function (req, res, next) {
             .then(result => {
                 if(result){
                     util.changeValueIfExists(result,req.body,"name");
+                    if(req.body.gender >= 0 && req.body.gender <=3){
+                        util.changeValueIfExists(result,req.body, "gender");
+                    }
                     util.changeValueIfExists(result,req.body, "birthdate");
-                    util.changeValueIfExists(result,req.body, "gender");
                     result.save().then(result =>{
                         res.status(200);
                         res.json(result);
@@ -77,23 +33,50 @@ router.put('/:id', function (req, res, next) {
 });
 
 
-/* DELETE user listing. */
+/* DELETE user listing. Nikita*/
+//TODO datum setzen wie bei register
 router.delete('/:id', function (req, res, next) {
-    if ("id" in req.params && req.params.id) {
-
-
+    if (util.hasKey(req.params,"id")) {
         var id = req.params.id;
-        req.models.User.destroy({where: {id: id}}).then(result => {
-            res.status(200);
-            res.json({message:"erfolg", deletedItems:result});
-
-        }).catch(err => {
-            res.status(400);
-            res.json(err)
-        })
+        req.models.User.findById(id)
+            .then(result => {
+                if(result){
+                    //hier wird der User gelöscht, nur nicht mit destroy
+                        req.models.APIKey.findOne({where:{id : id}}).then(key=>{
+                            key.destroy();
+                        });
+                        result.destroy().then((r)=>{
+                            result.save().then(result =>{
+                                res.status(200);
+                                res.json({message:"Erfolg"});
+                            }).catch(err=> next(err));
+                        }).catch(err=>next(err));
+                }
+                else {
+                    next({status:400,message:"Kein Element mit dieser ID gefunden!"});
+                }
+            })
+            .catch(err => next(err));
     } else {
-        res.json({id: "missing", name: "get"});
+        next({status:400,message:"Keine ID vorhanden!"});
     }
 });
 
+/* GET user listing. Mit aenderung, zurückgegeben wird nur name email und id
+ *  zurück gegeben werden alle User
+ */
+router.get('/', function (req, res, next) {
+    var erg = {values:[]};
+    req.models.User.findAll().then((result)=>{
+        if(result){
+            var temp;
+            for(var i =0;i <= result.length+1;i++){
+                temp= result.pop();
+                erg.values[i] = {name: temp.dataValues.name, email: temp.dataValues.email, id: temp.dataValues.id};
+            }
+            res.json(erg);
+            res.status(200);
+        }
+    }).catch(err => next(err));
+});
 module.exports = router;
