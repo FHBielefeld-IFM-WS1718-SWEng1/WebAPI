@@ -53,13 +53,12 @@ router.delete('/:id', function (req, res, next) {
                         }).catch(err=>next(err));
                 }
                 else {
-                    next({status:400,message:"Kein Element mit dieser ID gefunden.!"});
+                    next({status:400,message:"Kein Element mit dieser ID gefunden!"});
                 }
             })
             .catch(err => next(err));
     } else {
-        res.status(400);
-        res.json({id: "missing", name: "id"});
+        next({status:400,message:"Keine ID vorhanden!"});
     }
 });
 
