@@ -32,7 +32,30 @@ router.put('/:id', function (req, res, next) {
     }
 });
 
-
+/* GET user listing. */
+-router.get('/:id', function (req, res, next) {
+        if ("id" in req.params && req.params.id) {
+            var id = req.params.id;
+            req.models.User.findById(id)
+                .then((user) => {
+                    if (user) {
+                        delete user.dataValues.password;
+                        res.status(200);
+                        res.json(user);
+                    } else {
+                        res.status(400);
+                        res.json({error: "Kein User mit der ID " + id});
+                    }
+                }).catch((error) => {
+                    next(error);
+                }
+            );
+        } else {
+            res.status(404);
+            res.json({id: "missing", name: "get"});
+        }
+    }
+);
 /* DELETE user listing. Nikita*/
 //TODO datum setzen wie bei register
 router.delete('/:id', function (req, res, next) {
