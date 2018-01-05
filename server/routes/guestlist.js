@@ -2,6 +2,18 @@ const express = require('express');
 const router = express.Router();
 const util = require('../auth/utilities');
 
+/*  */
+router.get('/', (req, res, next) => {
+    req.models.Guestlist.findAll({where: {user_id: req.userid}}).then((result) => {
+        let array = [];
+        result.forEach((key) => {
+            array.push(key.dataValues);
+        });
+        res.status(200);
+        res.json({einladungen: array});
+    }).catch(err => next(err));
+});
+
 /* GET parties listing. */
 // TODO Einladung abschicken
 router.post('/', (req, res, next) => {
