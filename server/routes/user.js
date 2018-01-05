@@ -42,7 +42,9 @@ router.delete('/:id', function (req, res, next) {
             .then(result => {
                 if(result){
                     //hier wird der User gelöscht, nur nicht mit destroy
-
+                        req.models.APIKey.findOne({where:{id : id}}).then(key=>{
+                            key.destroy();
+                        });
                         result.destroy().then((r)=>{
                             result.save().then(result =>{
                                 res.status(200);
