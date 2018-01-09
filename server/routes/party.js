@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const util = require('../auth/utilities');
+const util = require('../helper/utilities');
 /* POST parties listing. */
 // TODO Route zum anlegen neuer einträge entwickeln
 router.post('/', function (req, res, next) {

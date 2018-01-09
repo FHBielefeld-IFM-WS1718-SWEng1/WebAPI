@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const util = require('../auth/utilities');
+const util = require('../helper/utilities');
 
 // TODO ist dies nur ein erstellen oder soll es auch eine um entscheidung geben ?
 router.post('/', (req, res, next) => {

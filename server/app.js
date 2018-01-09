@@ -1,7 +1,7 @@
 const express = require('express');   // Die express komponente ermöglicht einfaches erstellen von Routen
 var logger = require('morgan');     // Logger für Requests
 const bodyParser = require('body-parser');    // erstellt aus dem Request ein Javascript Object
-const checkToken = require('./auth/authenticate');
+const checkToken = require('./helper/authenticate');
 const Sequelize = require('sequelize');
 const cors = require('cors');
 // alle routen importieren
