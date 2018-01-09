@@ -1,4 +1,4 @@
-const util = require("../../server/auth/utilities");
+const util = require("../../server/helper/utilities");
 describe('Utilities', () => {
     describe('hasKey', () => {
         describe('Key vorhanden ', () => {

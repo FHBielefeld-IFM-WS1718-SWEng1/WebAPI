@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const util = require('../auth/utilities');
+const util = require('../helper/utilities');
 
 // Tempörere Lösung anstelle von der Datenbank!
 var temp = {name: "Liste aller User", values: []};
