@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const util = require('../auth/utilities');
+const util = require('../helper/utilities');
 /* POST parties listing. */
 // TODO Route zum anlegen neuer einträge entwickeln
 router.post('/', function (req, res, next) {
@@ -38,10 +38,10 @@ router.get('/', function (req, res, next) {
     let guest = true;
     console.log(req.query);
     if (util.hasKey(req.query, 'creator')) {
-        creator = req.query.creator;
+        creator = req.query.creator === 'true';
     }
     if (util.hasKey(req.query, 'guest')) {
-        guest = req.query.guest;
+        guest = req.query.guest === 'true';
     }
     if (creator === false && guest === false) {
         res.status(200);

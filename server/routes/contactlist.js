@@ -1,6 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const util = require('../auth/utilities');
+const util = require('../helper/utilities');
+
+router.post('/', (req, res, next) => {
+    req.models.Contactlist.create({user_id1: req.userid, user_id2: req.user_id, status: 0}).then((result) => {
+        res.status(203);
+        res.json(result);
+    }).catch(err => next(err));
+});
 
 router.get('/', (req, res, next) => {
     req.models.Contactlist.findAll({

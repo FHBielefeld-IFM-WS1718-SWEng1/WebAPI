@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var crypt = require("../auth/crypt");
+var crypt = require("../helper/crypt");
 
 router.post('/', function (req, res, next) {
     if ("email" in req.body && "name" in req.body && "password" in req.body) {
