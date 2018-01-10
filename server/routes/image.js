@@ -11,7 +11,7 @@ router.post('/', (req, res, next) => {
     });
     if (fs.existsSync("./demo/" + file + ".jpg")) {
         res.status(203);
-        res.json(result);
+        res.json({filename: file});
     }
 });
 router.get('/:id', (req, res, next) => {
