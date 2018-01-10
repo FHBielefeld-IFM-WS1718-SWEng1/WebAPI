@@ -36,8 +36,8 @@ if (process.env.NODE_ENV === 'dev') {
     sequelize
         .sync({force: true})
         .then(function (err) {
-            console.log("Datenbank wurde erfolgreich neuerstellt!");
             initdb(models)
+            console.log("Datenbank wurde erfolgreich neuerstellt!");
 
         }, function (err) {
             console.log('Beim erstellen der Datenbank ist folgender Fehler aufgetretten:', err);
