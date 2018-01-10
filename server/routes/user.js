@@ -91,7 +91,6 @@ router.delete('/:id', function (req, res, next) {
 router.get('/', function (req, res, next) {
     var erg = {values: []};
     req.models.User.findAll().then((result) => {
-        console.log(result);
         if (result) {
             result.forEach((user) => {
                 erg.values.push({name: user.name, email: user.email, id: user.id});

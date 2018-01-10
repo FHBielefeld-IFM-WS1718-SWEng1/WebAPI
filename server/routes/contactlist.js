@@ -3,10 +3,14 @@ const router = express.Router();
 const util = require('../helper/utilities');
 
 router.post('/', (req, res, next) => {
-    req.models.Contactlist.create({user_id1: req.userid, user_id2: req.user_id, status: 0}).then((result) => {
-        res.status(203);
-        res.json(result);
-    }).catch(err => next(err));
+    if (util.hasKey(req.body, 'userid')) {
+        req.models.Contactlist.create({user_id1: req.userid, user_id2: req.body.userid, status: 0}).then((result) => {
+            res.status(203);
+            res.json(result);
+        }).catch(err => next(err));
+    }else{
+        next({status: 400, message: "Kein Gültiger request userid erwartet!"});
+    }
 });
 
 router.get('/', (req, res, next) => {
@@ -35,7 +39,6 @@ router.get('/', (req, res, next) => {
         if (result) {
 
             result.forEach(val => {
-                console.log(val);
                 delete val.User.dataValues.password;
                 delete val.User.dataValues.createdAt;
                 delete val.User.dataValues.updatedAt;
@@ -145,7 +148,6 @@ router.delete('/', (req, res, next) => {
             res.status(200);
             res.json({message: "erfolg", items: result});
         }).catch(err => {
-            console.error(err);
             next(err)
         });
     } else {

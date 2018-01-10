@@ -54,7 +54,6 @@ router.put('/', (req, res, next) => {
                 next({status: 400, message: "es wurde keine Einladung gefunden von dem User zu der Party!"})
             }
         }).catch(err => {
-            console.error("Party");
             next(err);
         });
     } else {
