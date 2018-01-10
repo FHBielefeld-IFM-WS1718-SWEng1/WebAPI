@@ -39,7 +39,6 @@ router.get('/', (req, res, next) => {
         if (result) {
 
             result.forEach(val => {
-                console.log(val);
                 delete val.User.dataValues.password;
                 delete val.User.dataValues.createdAt;
                 delete val.User.dataValues.updatedAt;
@@ -149,7 +148,6 @@ router.delete('/', (req, res, next) => {
             res.status(200);
             res.json({message: "erfolg", items: result});
         }).catch(err => {
-            console.error(err);
             next(err)
         });
     } else {

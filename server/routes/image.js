@@ -6,11 +6,9 @@ const fs = require('fs');
 router.post('/', (req, res, next) => {
 
     let file = crypt.encurl("" + new Date());
-    console.log(file);
     fs.writeFileSync("./demo/" + file + ".jpg", req.body.data, 'base64', err => {
         next(err)
     });
-    console.log("\n\nwhy\n\n");
     if (fs.existsSync("./demo/" + file + ".jpg")) {
         res.status(203);
         res.json(result);
