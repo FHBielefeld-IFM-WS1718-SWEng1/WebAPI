@@ -14,6 +14,7 @@ const contactlist = require('./routes/contactlist');
 const guestlist = require('./routes/guestlist');
 const tasklist = require('./routes/tasklist');
 const rating = require('./routes/Rating');
+const image = require('./routes/image');
 // Globale Variablen
 var config = require('../databaseconfig.json');
 // Helper Funktionen
@@ -63,6 +64,7 @@ app.use(async function (req, res, next) {
     }
 });
 // Hier werden die Routen eingetragen die Login erfordern
+app.use('/image', image);
 app.use('/logout', logout);
 app.use('/user/contact', contactlist);
 app.use('/user', users);
