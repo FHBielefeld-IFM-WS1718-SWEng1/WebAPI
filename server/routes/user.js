@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const util = require('../helper/utilities');
 
-// Tempörere Lösung anstelle von der Datenbank!
-var temp = {name: "Liste aller User", values: []};
-
 /* PUT user listing. */
 router.put('/:id', function (req, res, next) {
     if (util.hasKey(req.params, "id")) {
@@ -58,7 +55,6 @@ router.put('/:id', function (req, res, next) {
 );
 
 /* DELETE user listing. Nikita*/
-//TODO datum setzen wie bei register
 router.delete('/:id', function (req, res, next) {
     if (util.hasKey(req.params, "id")) {
         var id = req.params.id;
