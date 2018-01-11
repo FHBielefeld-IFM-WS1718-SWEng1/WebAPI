@@ -1,5 +1,5 @@
 describe.skip('logout', () => {
-    before((done)=>{
+    before((done) => {
         chai.request(server)
             .post('/register')
             .send({email: "fischer@fisch.de", password: "test"})
@@ -14,9 +14,9 @@ describe.skip('logout', () => {
             let pwd = "test";
             chai.request(server)
                 .post('/login')
-                .send({email:mail, password: pwd}).then((result)=> {setAPI(mail);})
+                .send({email: mail, password: pwd}).then((result) => setAPI(mail))
                 .delete('/logout')
-                .query('api','test')
+                .query('api', 'test')
                 .end(function (err, res) {
                     expect(res).to.have.status(200);
                     expect(err).to.equal.null;
@@ -34,21 +34,21 @@ describe.skip('logout', () => {
  * @param eMail die Emailadresse
  * @returns {apiKey} man braucht den ApiKey
  */
-function setAPI(eMail){
-    models.User.findOne({where:{email:eMail}})
+function setAPI(eMail) {
+    models.User.findOne({where: {email: eMail}})
         .then((results) => {
-            if(results!=null){
-                models.APIKey.findOne({where:{user_id:results.dataValues.id}})
-                    .then((res) =>{
+            if (results != null) {
+                models.APIKey.findOne({where: {user_id: results.dataValues.id}})
+                    .then((res) => {
                         //hier wird der ApiKey des Users geaendert
                         res.dataValues.apiKey = test;
                     })
                     .catch((err) => {
-                        console.log({name:"der User ist nicht angemeldet",message:err.toString()});
+                        console.log({name: "der User ist nicht angemeldet", message: err.toString()});
                     });
             }
         })
-        .catch((err) =>{
-            console.log({name:"es gibt keinen User mit der Emailadresse",message:err.toString()});
+        .catch((err) => {
+            console.log({name: "es gibt keinen User mit der Emailadresse", message: err.toString()});
         });
 }

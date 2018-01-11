@@ -1,6 +1,6 @@
 describe('login', () => {
     // TODO: before einrichten Test schlägt fehl da keine daten in der db existieren!
-    before((done)=>{
+    before((done) => {
         chai.request(server)
             .post('/register')
             .send({name: "Peter", email: "fischer2@fisch.de", password: "strenggeheim"})

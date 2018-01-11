@@ -81,7 +81,7 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
-    if (err.status === 404 && !util.hasKey(err, 'message') ) {
+    if (err.status === 404 && !util.hasKey(err, 'message')) {
         err.message = "Die gewünschte Seite ist nicht vorhanden!";
     }
     res.locals.message = err.message;

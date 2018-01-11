@@ -51,7 +51,7 @@ describe.skip('user', () => {
     });
     describe('PUT', () => {
         it('should add a SINGLE blob on /parties POST', function (done) {
-            var daten2 = Object.assign({},daten);
+            var daten2 = Object.assign({}, daten);
 
             delete daten2.password;
             delete daten2.id;

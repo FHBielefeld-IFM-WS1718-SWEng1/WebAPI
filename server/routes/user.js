@@ -56,6 +56,7 @@ router.put('/:id', function (req, res, next) {
         }
     }
 );
+
 /* DELETE user listing. Nikita*/
 //TODO datum setzen wie bei register
 router.delete('/:id', function (req, res, next) {
