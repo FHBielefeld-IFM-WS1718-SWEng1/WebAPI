@@ -1,0 +1,596 @@
+swagger: '2.0'
+info:
+  description: Die Rest Api des PaPlas.
+  version: "0.4.0"
+  title: PaPla
+  contact:
+    name: Aheinisch@fh-bielefeld.de
+host: api.dleunig.de
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  UserSecurity:
+    type: apiKey
+    name: api
+    in: query
+security:
+  - UserSecurity: [] 
+paths:
+  /login:
+    post:
+      summary: Login
+      tags:
+        - login/logout
+      consumes: []
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/body'
+      responses:
+        '200':
+          description: Status 200
+          schema:
+            $ref: '#/definitions/login_schema'
+      security: []
+  /logout:
+    delete:
+      summary: Die Logout Route
+      tags:
+        - login/logout
+      consumes: []
+      parameters:
+        - name: api
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Status 200 wird gesendet wenn der Key gültig war
+          schema:
+           properties:
+             status:
+              type: string
+              example: Erfolg
+        '400':
+          description: Status 400 wird gesendet wenn der Key ungültig ist
+  /register:
+    post:
+      summary: Die Route um einen User anzulegen und z registrieren.
+      tags:
+        - login/logout
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: freier name
+              email:
+                $ref: '#/definitions/email'
+              password:
+                type: string
+                example: strenggeheimespassword
+            
+      responses:
+        '201':
+          description: Status 201
+      security: []
+  /party:
+    get:
+      summary: >-
+        Das laden aller Parties die existieren die den Nutzer entweder in der
+        Gästeliste haben oder er der ersteller ist.
+      tags:
+        - party
+      parameters: 
+        - name: creator
+          in: query
+          required: false
+          default: true
+          type: boolean
+          description: Sollen alle Parties zurück geliefert werden wo der User der Ersteller ist?
+        - name: guest
+          in: query
+          required: false
+          default: true
+          type: boolean
+          description: Sollen alle Parties zurück geliefert werden wo der User eingeladen wurde?
+      responses:
+        '200':
+          description: Status 200 wird gesendet wenn der Key Gültig ist
+          schema:
+            $ref: '#/definitions/partypartialarray'
+    post:
+      summary: Hinzufügen von einer Party
+      description: Legt eine neue Party für den angemeldeten User an. Liefert wieder ein Objekt zurück wo der User dann aufgelistet wird.
+      tags:
+        - party
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/partyOhneErsteller'
+      responses:
+        '200':
+          description: Status 201 wird gesendet wenn die Party angelegt wurde
+          schema:
+            $ref: '#/definitions/partysmall'
+  '/party/{partyID}':
+    parameters:
+      - name: partyID
+        in: path
+        description: Die ID des Party Objektes
+        required: true
+        type: integer
+    get:
+      summary: temp
+      tags:
+        - party
+      responses:
+        '200':
+          description: Dies ist ein Text
+          schema:
+            $ref: '#/definitions/partyfull'
+    put:
+      summary: Aktualisieren einer Party
+      tags:
+        - party
+      operationId: partyPartyIDPUT
+      responses:
+        '200':
+          description: Beliebiger Text
+    delete:
+      summary: Löschen einer Party
+      tags:
+        - party
+      responses:
+        '200':
+          description: Status 200 wird gesendet wenn die Party
+          schema:
+            type: object
+            properties:
+              deletedItems:
+                type: integer
+                example: 2
+  '/party/guest':
+    post:
+      summary: Hinzufügen eines neuen Gastes
+      tags: 
+        - party
+      responses:
+        201:
+          description: erfolgreich gesendet
+          schema:
+            type: object
+            properties:
+              userid:
+                type: integer
+              partyid:
+                type: integer
+    put:
+      summary: Ändern des Status des Gastes
+      tags: 
+        - party
+      responses:
+        200:
+          description: erfolgreich abgeändert
+    delete:
+      summary: Löschen einer Einladung/Gastes
+      tags: 
+        - party
+      responses:
+        200:
+          description: erfolgreich gelöscht
+  '/party/rating':
+    post:
+      summary: Hinzufügen einer Bewertung
+      tags: 
+        - party
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              partyid: 
+                type: integer
+              rating:
+                type: integer
+      responses:
+        200:
+          description: erfolgreich angelegt
+  '/party/todo':
+    post:
+      summary: Hinzufügen eines neuen TODOs  
+      tags: 
+        - party
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: integer
+              party_id:
+                type: integer
+              text:
+                type: string
+              status:
+                type: integer
+      responses:
+        201:
+          description: Erfolgreich angelegt
+    put:
+      summary: Aktualisieren eines TODOs
+      tags: 
+        - party
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: integer
+              party_id:
+                type: integer
+              text:
+                type: string
+              status:
+                type: integer
+      responses:
+        200:
+          description: Erfolreich aktualisiert
+    delete:
+      summary: Löschen eines TODOs
+      tags: 
+        - party
+      
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+      responses:
+        200:
+          description: Erfolreich gelöscht
+  '/party/task':
+    post:
+      summary: HInzufügen eines neuen Tasks  
+      tags: 
+        - party
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: integer
+              party_id:
+                type: integer
+              text:
+                type: string
+              status:
+                type: integer
+      responses:
+        201:
+          description: Erfolgreich angelegt
+    put:
+      summary: Aktualisieren eines Tasks
+      tags: 
+        - party
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: integer
+              party_id:
+                type: integer
+              text:
+                type: string
+              status:
+                type: integer
+      responses:
+        200:
+          description: Erfolreich aktualisiert
+    delete:
+      summary: Löschen eines TODOs
+      tags: 
+        - party
+      parameters: 
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+      responses:
+        200:
+          description: Erfolreich gelöscht
+  '/user/{userID}':
+    parameters:
+      - name: userID
+        in: path
+        description: Die ID des Party Objektes
+        required: true
+        type: integer
+    get:
+      summary: Daten eines bestimmten Users
+      tags:
+        - user
+      responses:
+        '200':
+          description: Status 200
+    put:
+      summary: Daten aktualisieren
+      tags:
+        - user
+      responses:
+        '200':
+          description: Status 200
+    delete:
+      summary: Löschen eines Nutzers klappt nur bei dem Nutzer von dem auch der API-Key ist
+      tags:
+        - user
+      responses:
+        '200':
+          description: Status 200 wird gesendet wenn das Löschen des Users erfolgreich war. Außerdem wird der API-Key ungültig gemacht
+        '400':
+          description: Status 400 wird geschickt wenn der Request 
+  '/user/contact':
+    get:
+      summary: anzeigen aller Kontakte
+      tags:
+        - user
+      responses:
+        '200':
+          description: Status 200 wird gesendet wenn der Request gültig ist!
+          schema:
+            type: object
+            properties:
+              count:
+                type: integer
+                example: 1
+              contacts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    email:
+                      type: string
+                    name:
+                      type: string
+                    profilepicture:
+                      type: string
+                    loginAt: 
+                      $ref: '#/definitions/datetime'
+    put:
+      summary: aktualisieren eines Kontaktes
+      tags:
+        - user
+      responses:
+        '200':
+          description: Status 200 wird gesendet wenn der Request gültig ist!
+    post:
+      summary: anzeigen aller Kontakte
+      tags:
+        - user
+      responses:
+        '200':
+          description: Status 200 wird gesendet wenn der Request gültig ist!
+  '/image':
+    post:
+      summary: anzeigen aller Kontakte
+      tags:
+        - image
+      responses:
+        '200':
+          description: Status 200 wird gesendet wenn der Request gültig ist!
+  '/image/{id}':
+    parameters:
+      - name: id
+        in: path
+        description: Die ID des Party Objektes
+        required: true
+        type: integer
+    get:
+      summary: Daten eines bestimmten Users
+      tags:
+        - image
+      responses:
+        '200':
+          description: Status 200
+definitions:
+  partyOhneErsteller:
+    type: object
+    properties:
+      id:
+        $ref: '#/definitions/id'
+      name:
+        type: string
+        example: Belibiger Name einer Party
+        maxLength: 50
+      description:
+        type: string
+        example: Description
+      startDate:
+        $ref: '#/definitions/datetime'
+      endDate:
+        $ref: '#/definitions/datetime'
+      location:
+        type: string
+        example: Location
+  email: 
+    type: string
+    example: "fischer@fisch.de"
+  id:
+    type: number
+    example: 0
+    minimum: 0
+    maximum: 2048
+  key:
+    type: string
+    example: base64string
+  datetime:
+    type: string
+    example: '2011-10-05T14:48:00.000Z'
+  user:
+    type: object
+    required:
+      - id
+      - name
+      - email
+    properties:
+      id:
+        $ref: '#/definitions/id'
+      name:
+        type: string
+        example: Belibiger Anzeigename
+      email:
+        $ref: '#/definitions/email'
+      birthdate:
+        $ref: '#/definitions/datetime'
+      gender:
+        type: number
+        example: 0
+        minimum: 0
+        maximum: 4
+      loginAt:
+        $ref: '#/definitions/datetime'
+    description: Das Grundkonzept eines Jeden Users.
+  userfull:
+    type: object
+    required:
+      - id
+      - name
+      - email
+    properties:
+      id:
+        $ref: '#/definitions/id'
+      name:
+        type: string
+        example: Belibiger Anzeigename
+      email:
+        $ref: '#/definitions/email'
+      birthdate:
+        $ref: '#/definitions/datetime'
+      gender:
+        type: number
+        example: 0
+        minimum: 0
+        maximum: 4
+      loginAt:
+        $ref: '#/definitions/datetime'
+      contactList:
+        type: array
+        items:
+          $ref: '#/definitions/user'
+    description: Das Grundkonzept eines einzelnen Users.
+  partysmall:
+    type: object
+    properties:
+      id:
+        $ref: '#/definitions/id'
+      name:
+        type: string
+        example: Belibiger Name einer Party
+        maxLength: 50
+      description:
+        type: string
+        example: Description
+      startDate:
+        $ref: '#/definitions/datetime'
+      endDate:
+        $ref: '#/definitions/datetime'
+      location:
+        type: string
+        example: Location
+      ersteller:
+        $ref: '#/definitions/user'
+  body:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        $ref: '#/definitions/email'
+      password:
+        type: string
+        example: strenggeheimespassword
+  login_schema:
+    properties:
+      id:
+        $ref: '#/definitions/id'
+      name:
+        type: string
+        example: Belibiger Anzeigename
+      email:
+        $ref: '#/definitions/email'
+      birthdate:
+        $ref: '#/definitions/datetime'
+      gender:
+        type: number
+        example: 0
+        minimum: 0
+        maximum: 4
+      loginAt:
+        $ref: '#/definitions/datetime'
+      key:
+        $ref: '#/definitions/key'
+  partypartialarray:
+    properties:
+      count:
+        type: integer
+        example: 2
+      partys:
+        type: array
+        items:
+          $ref: '#/definitions/partysmall'
+  partyfull:
+    type: object
+    properties:
+      id:
+        $ref: '#/definitions/id'
+      name:
+        type: string
+        example: Belibiger Name einer Party
+        maxLength: 50
+      description:
+        type: string
+        example: Description
+      startDate:
+        $ref: '#/definitions/datetime'
+      endDate:
+        $ref: '#/definitions/datetime'
+      location:
+        type: string
+        example: Location
+      ersteller:
+        $ref: '#/definitions/user'
+      gäste:
+        type: array
+        minItems: 0
+        maxItems: 100
+        items: 
+          $ref: '#/definitions/user'
