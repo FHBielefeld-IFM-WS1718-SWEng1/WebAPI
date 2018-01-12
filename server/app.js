@@ -20,6 +20,7 @@ var config = require('../databaseconfig.json');
 // Helper Funktionen
 const checkToken = require('./helper/authenticate');
 const initdb = require('./helper/dbinit');
+const util = require('./helper/utilities');
 
 const sequelize = new Sequelize(config.dbname, config.username, config.password, config.opts);
 const models = require("./models/MainModels.js")(sequelize, Sequelize);
@@ -80,8 +81,8 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
-    if (err.status === 404) {
-        err.message = "Die gewünschte Seite ist nicht vorhandden!";
+    if (err.status === 404 && !util.hasKey(err, 'message')) {
+        err.message = "Die gewünschte Seite ist nicht vorhanden!";
     }
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'dev' ? err : {};

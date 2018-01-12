@@ -15,7 +15,6 @@ router.get('/', (req, res, next) => {
 });
 
 /* GET parties listing. */
-// TODO Einladung abschicken
 router.post('/', (req, res, next) => {
     if (util.hasKey(req.body, 'partyid') && util.hasKey(req.body, 'userid')) {
         req.models.Guestlist.find({where: {party_id: req.body.partyid, user_id: req.body.userid}}).then(result => {
@@ -38,7 +37,6 @@ router.post('/', (req, res, next) => {
     }
 });
 
-// TODO Einladung bestätigen oder ablehnen!
 router.put('/', (req, res, next) => {
     if (util.hasKey(req.body, 'partyid') && util.hasKey(req.body, 'userid') && util.hasKey(req.body, 'status')) {
         req.models.Guestlist.find({where: {party_id: req.body.partyid, user_id: req.body.userid}}).then(result => {

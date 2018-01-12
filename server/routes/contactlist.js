@@ -8,7 +8,7 @@ router.post('/', (req, res, next) => {
             res.status(203);
             res.json(result);
         }).catch(err => next(err));
-    }else{
+    } else {
         next({status: 400, message: "Kein Gültiger request userid erwartet!"});
     }
 });
@@ -104,7 +104,6 @@ router.put('/', (req, res, next) => {
 
 });
 
-
 router.delete('/', (req, res, next) => {
     if (util.hasKey(req.body, 'id')) {
 
@@ -154,4 +153,5 @@ router.delete('/', (req, res, next) => {
         next({status: 400, message: "Es wird eine Id beim request benötigt!"})
     }
 });
+
 module.exports = router;
