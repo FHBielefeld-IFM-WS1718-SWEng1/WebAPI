@@ -10,9 +10,12 @@ router.put('/:id', function (req, res, next) {
             .then(result => {
                 if (result) {
                     util.changeValueIfExists(result, req.body, "name");
-                    if (req.body.gender >= 0 && req.body.gender <= 3) {
-                        util.changeValueIfExists(result, req.body, "gender");
+                    if (util.hasKey(req.body,"gender")) {
+                        if(req.body.gender >= 0 && req.body.gender <= 3){
+                            util.changeValueIfExists(result, req.body, "gender");
+                        }
                     }
+                    util.changeValueIfExists(result,req.body,"password");
                     util.changeValueIfExists(result, req.body, "birthdate");
                     result.save().then(result => {
                         res.status(200);
