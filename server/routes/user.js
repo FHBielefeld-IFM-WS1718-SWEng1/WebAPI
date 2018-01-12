@@ -10,9 +10,12 @@ router.put('/:id', function (req, res, next) {
             .then(result => {
                 if (result) {
                     util.changeValueIfExists(result, req.body, "name");
-                    if (req.body.gender >= 0 && req.body.gender <= 3) {
-                        util.changeValueIfExists(result, req.body, "gender");
+                    if (util.hasKey(req.body,"gender")) {
+                        if(req.body.gender >= 0 && req.body.gender <= 3){
+                            util.changeValueIfExists(result, req.body, "gender");
+                        }
                     }
+                    util.changeValueIfExists(result,req.body,"password");
                     util.changeValueIfExists(result, req.body, "birthdate");
                     result.save().then(result => {
                         res.status(200);
@@ -30,7 +33,7 @@ router.put('/:id', function (req, res, next) {
 });
 
 /* GET user listing. */
--router.get('/:id', function (req, res, next) {
+router.get('/:id', function (req, res, next) {
         if ("id" in req.params && req.params.id) {
             var id = req.params.id;
             req.models.User.findById(id)
