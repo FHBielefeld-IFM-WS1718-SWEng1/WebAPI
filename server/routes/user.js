@@ -30,7 +30,7 @@ router.put('/:id', function (req, res, next) {
 });
 
 /* GET user listing. */
--router.get('/:id', function (req, res, next) {
+router.get('/:id', function (req, res, next) {
         if ("id" in req.params && req.params.id) {
             var id = req.params.id;
             req.models.User.findById(id)
