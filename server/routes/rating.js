@@ -21,7 +21,6 @@ router.post('/', (req, res, next) => {
                     res.json(result);
                 }).catch(err => next(err));
             }
-
         }).catch(err => next(err));
     }
 });

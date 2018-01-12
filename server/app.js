@@ -13,7 +13,7 @@ const todolist = require('./routes/todolist');
 const contactlist = require('./routes/contactlist');
 const guestlist = require('./routes/guestlist');
 const tasklist = require('./routes/tasklist');
-const rating = require('./routes/Rating');
+const rating = require('./routes/rating');
 const image = require('./routes/image');
 // Globale Variablen
 var config = require('../databaseconfig.json');
