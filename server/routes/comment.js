@@ -4,7 +4,16 @@ const util = require('../helper/utilities');
 
 router.get('/:id', function (req, res, next){
     if(util.hasKey(req.params,"id")){
-
+        var id = req.params.id;
+        req.models.Comment.findById(id).then(result=>{
+           if(result){
+               res.status(200);
+               res.json(result);
+           } else{
+               res.status(400);
+               res.json({error: "Kein Kommentar mit der ID " + id});
+           }
+        });
     } else {
         next({status: 400, id: "missing", name: "id"});
     }
