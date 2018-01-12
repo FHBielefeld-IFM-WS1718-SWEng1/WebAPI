@@ -8,6 +8,7 @@ const app = require("../server/app");
 global.server = app.listener;
 
 before(function(done){
+    this.setTimeout(4000);
     app.sequelize
         .sync({force: true})
         .then(function (err) {
