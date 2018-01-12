@@ -15,7 +15,7 @@ router.post('/', (req, res, next) => {
     }
 });
 router.get('/:id', (req, res, next) => {
-    if (fs.existsSync("./demo/" + req.params.id + ".jpg")) {
+    if (fs.existsSync("./upload/" + req.params.id + ".jpg")) {
         res.json({data: fs.readFileSync("./upload/" + req.params.id + ".jpg", 'base64')});
     } else {
         next({status: 404, message: "Kein Bild mit dieser ID!"});
