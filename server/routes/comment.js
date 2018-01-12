@@ -39,7 +39,7 @@ router.delete('/:id', function (req, res, next){
 
 router.post('/', function (req, res, next){
     if(util.hasKey(req.body,'user_id') && util.hasKey(req.body,'party_id')){
-        req.models.create({text:req.body.text,user_id:req.body.user_id,party_id:req.body.party_id})
+        req.models.Comment.create({text:req.body.text,user_id:req.body.user_id,party_id:req.body.party_id})
             .then(result=>{
                 res.status(203);
                 res.json(result);
@@ -53,9 +53,15 @@ router.put('/:id', function (req, res, next){
     if(util.hasKey(req.params,'id')){
         req.models.Comment.findById(req.params.id).then(result=>{
             util.changeValueIfExists(result,req.body,"text");
+            result.save().then((result1) => {
+                res.status(200);
+                res.json(result);
+            }).catch(err => next(err));
         }).catch(err =>next(err));
     } else{
         next({status: 400, id: "missing", name: "ID"});
     }
 });
 
+
+module.exports = router;
