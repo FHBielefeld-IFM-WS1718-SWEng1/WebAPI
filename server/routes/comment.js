@@ -49,3 +49,13 @@ router.post('/', function (req, res, next){
     }
 });
 
+router.put('/:id', function (req, res, next){
+    if(util.hasKey(req.params,'id')){
+        req.models.Comment.findById(req.params.id).then(result=>{
+            util.changeValueIfExists(result,req.body,"text");
+        }).catch(err =>next(err));
+    } else{
+        next({status: 400, id: "missing", name: "ID"});
+    }
+});
+
