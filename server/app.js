@@ -13,7 +13,7 @@ const todolist = require('./routes/todolist');
 const contactlist = require('./routes/contactlist');
 const guestlist = require('./routes/guestlist');
 const tasklist = require('./routes/tasklist');
-const rating = require('./routes/Rating');
+const rating = require('./routes/rating');
 const image = require('./routes/image');
 const comment = require('./routes/comment');
 // Globale Variablen
@@ -31,7 +31,7 @@ const page404 = (req, res, next) => next({status: 404});
 
 app.use(cors());
 // app.use(logger('dev'));
-app.use(bodyParser.json());                             //
+app.use(bodyParser.json({limit: '400kb'}));                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
 if (process.env.NODE_ENV === 'dev') {
     console.log(process.env.NODE_ENV);

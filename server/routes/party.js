@@ -93,7 +93,13 @@ router.get('/:id', function (req, res, next) {
             }, {model: req.models.Todolistitem}, {
                 model: req.models.Guestlist,
                 include: req.models.User
-            }, {model: req.models.User}]
+            }, {model: req.models.User}, {
+                model: req.models.Rating,
+                include: req.models.User
+            }, {
+                    model: req.models.Comment,
+                    include: req.models.Answer
+                }]
         })
             .then((result) => {
                 if (result) {
@@ -121,6 +127,21 @@ router.get('/:id', function (req, res, next) {
                     result.Guestlists.forEach((value) => {
                         util.removeTimeStamp(value.dataValues);
                         retval.guests.push(value.dataValues);
+                    });
+                    retval.ratings = [];
+                    retval.ratingAverage = 0;
+                    result.Ratings.forEach((value) => {
+                        util.removeTimeStamp(value.dataValues);
+                        util.removeKeysFromUser(value.User.dataValues);
+                        retval.ratings.push(value.dataValues);
+                        ratingAverage += value.dataValues.value;
+                    });
+                    retval.ratingAverage /= retval.ratings.length;
+                    result.comments = [];
+                    result.Comments.forEach((value) => {
+                        util.removeTimeStamp(value.dataValues);
+                        util.removeKeysFromUser(value.User.dataValues);
+                        retval.comments.push(value.dataValues);
                     });
                     res.status(200);
                     res.json(retval);
