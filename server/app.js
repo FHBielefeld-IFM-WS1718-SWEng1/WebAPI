@@ -75,7 +75,7 @@ app.use('/party/rating', rating);
 app.use('/party/todo', todolist);
 app.use('/party/task', tasklist);
 app.use('/party', parties);
-app.use('/pcomment', comment);
+app.use('/comment', comment);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next({status: 404, message: 'Not Found'});
