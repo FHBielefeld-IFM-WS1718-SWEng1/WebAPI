@@ -105,7 +105,7 @@ router.put('/', (req, res, next) => {
 });
 
 router.delete('/', (req, res, next) => {
-    if (util.hasKey(req.body, 'id')) {
+    if (util.hasKey(req.body, 'userid')) {
 
 
         req.models.Contactlist.destroy({
