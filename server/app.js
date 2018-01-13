@@ -13,13 +13,15 @@ const todolist = require('./routes/todolist');
 const contactlist = require('./routes/contactlist');
 const guestlist = require('./routes/guestlist');
 const tasklist = require('./routes/tasklist');
-const rating = require('./routes/Rating');
+const rating = require('./routes/rating');
 const image = require('./routes/image');
+const comment = require('./routes/comment');
 // Globale Variablen
 var config = require('../databaseconfig.json');
 // Helper Funktionen
 const checkToken = require('./helper/authenticate');
 const initdb = require('./helper/dbinit');
+const util = require('./helper/utilities');
 
 const sequelize = new Sequelize(config.dbname, config.username, config.password, config.opts);
 const models = require("./models/MainModels.js")(sequelize, Sequelize);
@@ -29,7 +31,7 @@ const page404 = (req, res, next) => next({status: 404});
 
 app.use(cors());
 // app.use(logger('dev'));
-app.use(bodyParser.json());                             //
+app.use(bodyParser.json({limit: '400kb'}));                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
 if (process.env.NODE_ENV === 'dev') {
     console.log(process.env.NODE_ENV);
@@ -73,6 +75,7 @@ app.use('/party/rating', rating);
 app.use('/party/todo', todolist);
 app.use('/party/task', tasklist);
 app.use('/party', parties);
+app.use('/comment', comment);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next({status: 404, message: 'Not Found'});
@@ -80,8 +83,8 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
-    if (err.status === 404) {
-        err.message = "Die gewünschte Seite ist nicht vorhandden!";
+    if (err.status === 404 && !util.hasKey(err, 'message')) {
+        err.message = "Die gewünschte Seite ist nicht vorhanden!";
     }
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'dev' ? err : {};

@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const util = require('../helper/utilities');
 /* POST parties listing. */
-// TODO Route zum anlegen neuer einträge entwickeln
 router.post('/', function (req, res, next) {
     if (util.hasKey(req.body, "name") &&
         util.hasKey(req.body, "startDate") &&
@@ -30,7 +29,6 @@ router.post('/', function (req, res, next) {
 /*
     Hier sollen alle Parties angezeigt werden die entweder von User erstellt wurden oder wo er als Gast eingeladen wurde.
 */
-// TODO Route zum anzeigen aller Parties an welche der User teilnimmt
 router.get('/', function (req, res, next) {
     // nach überlegungen wäre es vielleicht besser wenn das Frontend einfach auch den User mit angibt ... dennoch war in der besprechung gesagt worden, dass das Frontend einfach nur den APIKey schmeist
     // somit müssen wir den User finden dem der APIKey gehört
@@ -83,7 +81,6 @@ router.get('/', function (req, res, next) {
 });
 
 /* GET parties listing. */
-// TODO Route zum anzeigen einer speziellen Party an welche der User Teilnehmen kann oder mitglied ist!
 router.get('/:id', function (req, res, next) {
     if ("id" in req.params && req.params.id) {
         if (typeof req.params.id === 'number') {
@@ -96,7 +93,13 @@ router.get('/:id', function (req, res, next) {
             }, {model: req.models.Todolistitem}, {
                 model: req.models.Guestlist,
                 include: req.models.User
-            }, {model: req.models.User}]
+            }, {model: req.models.User}, {
+                model: req.models.Rating,
+                include: req.models.User
+            }, {
+                    model: req.models.Comment,
+                    include: req.models.Answer
+                }]
         })
             .then((result) => {
                 if (result) {
@@ -125,6 +128,21 @@ router.get('/:id', function (req, res, next) {
                         util.removeTimeStamp(value.dataValues);
                         retval.guests.push(value.dataValues);
                     });
+                    retval.ratings = [];
+                    retval.ratingAverage = 0;
+                    result.Ratings.forEach((value) => {
+                        util.removeTimeStamp(value.dataValues);
+                        util.removeKeysFromUser(value.User.dataValues);
+                        retval.ratings.push(value.dataValues);
+                        ratingAverage += value.dataValues.value;
+                    });
+                    retval.ratingAverage /= retval.ratings.length;
+                    result.comments = [];
+                    result.Comments.forEach((value) => {
+                        util.removeTimeStamp(value.dataValues);
+                        util.removeKeysFromUser(value.User.dataValues);
+                        retval.comments.push(value.dataValues);
+                    });
                     res.status(200);
                     res.json(retval);
                 } else {
@@ -137,7 +155,6 @@ router.get('/:id', function (req, res, next) {
 });
 
 /* PUT parties listing. */
-// TODO Route zum abändern
 router.put('/:id', function (req, res, next) {
     if (util.hasKey(req.params, "id")) {
         req.models.Party.findById(req.params.id)

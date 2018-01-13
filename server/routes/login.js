@@ -6,7 +6,6 @@ router.post('/', function (req, res, next) {
     if ('password' in req.body && 'email' in req.body) {
         req.models.User.findAll({where: {email: req.body.email}}).then(function (ergebnisse) {
             if (ergebnisse[0] && ergebnisse[0].password == crypt.enc(req.body.password)) {
-                // TODO wenn bereits ein Key für diesen Nutzer in der Tabelle vorhanden ist kein neuen erstellen! Absprache wie die API reagieren soll 
                 var userObjekt = ergebnisse[0].dataValues;
                 var hash = crypt.encurl(userObjekt.email + "," + new Date().toLocaleString());
                 req.models.APIKey.create({user_id: userObjekt.id, apiKey: hash}).then((result) => {
