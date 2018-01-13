@@ -38,20 +38,21 @@ router.put('/:id', function (req, res, next){
 });
 
 
-router.post('/', function (req, res, next){
-
+router.delete('/:id', function (req, res, next){
+    if(util.hasKey(req.params,"id")){
+        req.models.Picture.findById(req.params.id).then(picture=>{
+            if(picture){
+                picture.destroy().then(r=> picture.save.then(result=>{
+                    res.status(200);
+                    res.json({message:"Erfolg"});
+                }));
+            } else {
+                next({status: 400, message: "Kein Element mit dieser ID gefunden!"});
+            }
+        });
+    } else {
+        next({status: 400, message: "Keine ID vorhanden!"});
+    }
 });
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;
