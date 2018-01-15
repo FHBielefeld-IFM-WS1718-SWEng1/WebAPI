@@ -64,4 +64,15 @@ router.put('/:id', function (req, res, next){
 });
 
 
+router.post('/:id/answer', function (req, res, next) {
+    if (util.hasKey(req.body, 'text')) {
+        req.models.Answer.create({text: req.body.text, user_id: req.userid, comment_id: req.params.id})
+            .then(result => {
+                res.status(201);
+                res.json(result);
+            }).catch(err => next(err));
+    } else {
+        next({status: 400, message: "benötigt wird ein text"});
+    }
+});
 module.exports = router;
