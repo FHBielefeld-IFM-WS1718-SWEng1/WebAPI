@@ -51,7 +51,7 @@ var exports = module.exports = function (sequelize, Sequelize) {
 
     bindbi(temp.Comment, temp.Answer, 'comment_id');
 
-    bindbi(temp.Choice, temp.UserChoice, 'comment_id');
+    bindbi(temp.Choice, temp.UserChoice, 'choice_id');
 
     bindbi(temp.Voting, temp.Choice, 'voting_id');
 

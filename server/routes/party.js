@@ -98,9 +98,18 @@ router.get('/:id', function (req, res, next) {
                 model: req.models.Rating,
                 include: req.models.User
             }, {
-                    model: req.models.Comment,
-                    include: req.models.Answer
-                }]
+                model: req.models.Comment,
+                include: req.models.Answer
+            }, {
+                model: req.models.Voting,
+                include: {
+                    model: req.models.Choice,
+                    include: {
+                        model: req.models.UserChoice,
+                        include: req.models.User
+                    }
+                }
+            }]
         })
             .then((result) => {
                 if (result) {
@@ -144,6 +153,39 @@ router.get('/:id', function (req, res, next) {
                         util.removeKeysFromUser(value.User.dataValues);
                         retval.comments.push(value.dataValues);
                     });
+                    retval.votings = [];
+                    result.Votings.forEach((value) => {
+                        let vote = {};
+                        vote.id = value.id;
+                        vote.name = value.name;
+                        vote.choices = [];
+                        if (util.hasKey(value, 'Choices')) {
+                            value.Choices.forEach(value => {
+                                let choice = {};
+                                choice.id = value.id;
+                                choice.text = value.text;
+                                choice.userChoices = [];
+                                choice.votes = 0;
+                                if (util.hasKey(value, 'UserChoices')) {
+                                    console.log(value);
+                                    value.UserChoices.forEach(value => {
+                                        choice.votes++;
+                                        let userChoice = {};
+                                        userChoice.id = value.id;
+                                        userChoice.user = {};
+                                        userChoice.user.id = value.User.id;
+                                        userChoice.user.email = value.User.email;
+                                        userChoice.user.name = value.User.name;
+                                        choice.userChoices.push(userChoice);
+                                    });
+                                }
+                                vote.choices.push(choice);
+                            });
+                        }
+                        retval.votings.push(vote);
+                    });
+
+
                     res.status(200);
                     res.json(retval);
                 } else {

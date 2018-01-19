@@ -49,4 +49,44 @@ module.exports = function (models) {
         value.user_id = value.party_id;
         models.Task.create(value);
     });
+    [
+        {user_id: 1, party_id: 1, name: "Hallo1"},
+        {user_id: 1, party_id: 1, name: "Hallo2"},
+        {user_id: 1, party_id: 1, name: "Hallo3"},
+        {user_id: 1, party_id: 1, name: "Hallo4"}
+    ].forEach(value => {
+        models.Voting.create(value);
+    });
+    [
+        {voting_id: 1, text : "Extrem Feiern1"},
+        {voting_id: 1, text : "Extrem Feiern2"},
+        {voting_id: 1, text : "Extrem Feiern3"},
+        {voting_id: 1, text : "Extrem Feiern4"},
+        {voting_id: 1, text : "Extrem Feiern5"},
+        {voting_id: 1, text : "Extrem Feiern6"},
+        {voting_id: 1, text : "Extrem Feiern7"},
+        {voting_id: 1, text : "Extrem Feiern8"},
+        {voting_id: 1, text : "Extrem Feiern9"},
+        {voting_id: 1, text : "Extrem Feiern10"},
+        {voting_id: 1, text : "Extrem Feiern11"},
+        {voting_id: 1, text : "Extrem Feiern12"}
+    ].forEach(value => {
+        models.Choice.create(value);
+    });
+    [
+        {user_id: 1, choice_id: 1},
+        {user_id: 1, choice_id: 2},
+        {user_id: 1, choice_id: 3},
+        {user_id: 1, choice_id: 4},
+        {user_id: 2, choice_id: 1},
+        {user_id: 2, choice_id: 2},
+        {user_id: 1, choice_id: 5},
+        {user_id: 2, choice_id: 4},
+        {user_id: 3, choice_id: 1},
+        {user_id: 3, choice_id: 2},
+        {user_id: 3, choice_id: 3},
+        {user_id: 3, choice_id: 4},
+    ].forEach(value => {
+        models.UserChoice.create(value);
+    });
 };
