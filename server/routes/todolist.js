@@ -4,7 +4,7 @@ const util = require('../helper/utilities');
 
 
 router.post('/', (req, res, next) => {
-    req.models.Todo.create({
+    req.models.Todolistitem.create({
         user_id: req.body.user_id,
         party_id: req.body.party_id,
         text: req.body.text,
@@ -19,8 +19,8 @@ router.post('/', (req, res, next) => {
     }).catch(err => next(err));
 });
 
-router.put('/', (req, res, next) => {
-    req.models.Todo.findById(req.body.id)
+router.put('/:id', (req, res, next) => {
+    req.models.Todolistitem.findById(req.params.id)
         .then(value => {
             util.changeValueIfExists(value, req.body, 'text');
             util.changeValueIfExists(value, req.body, 'status');
@@ -35,8 +35,8 @@ router.put('/', (req, res, next) => {
         }).catch(err => next(err));
 });
 
-router.delete('/', (req, res, next) => {
-    req.models.Todo.destroy({where: {id: req.body.id}}).then(value => {
+router.delete('/:id', (req, res, next) => {
+    req.models.Todolistitem.destroy({where: {id: req.params.id}}).then(value => {
         if (value) {
             res.status(200);
             res.json(value);
