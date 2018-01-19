@@ -12,7 +12,7 @@ var exports = module.exports = function (sequelize, Sequelize) {
     temp.Contactlist = require("./model/Contactlist.js")(sequelize, Sequelize);
     temp.Guestlist = require("./model/Guestlist.js")(sequelize, Sequelize);
     temp.Comment = require("./model/Comment.js")(sequelize, Sequelize);
-    temp.Picture = require("./model/Picture.js")(sequelize,Sequelize);
+    temp.Gallery = require("./model/Gallery.js")(sequelize,Sequelize);
     temp.Answer = require("./model/Answer.js")(sequelize, Sequelize);
     temp.Todolistitem = require("./model/Todolistitem.js")(sequelize, Sequelize);
     temp.Calculationitem = require("./model/Calculationitem.js")(sequelize, Sequelize);
@@ -35,8 +35,8 @@ var exports = module.exports = function (sequelize, Sequelize) {
     bindbi(temp.User, temp.Contactlist, 'user_id1');
     bindbi(temp.User, temp.Contactlist, 'user_id2');
 
-    bindbi(temp.User, temp.Picture,'user_id');
-    bindbi(temp.Party, temp.Picture,'party_id');
+    bindbi(temp.User, temp.Gallery,'user_id');
+    bindbi(temp.Party, temp.Gallery,'party_id');
 
     bindbi(temp.User, temp.Guestlist, 'user_id');
     bindbi(temp.Party, temp.Guestlist, 'party_id');

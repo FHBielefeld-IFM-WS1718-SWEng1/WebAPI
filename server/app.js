@@ -16,7 +16,7 @@ const tasklist = require('./routes/tasklist');
 const rating = require('./routes/rating');
 const image = require('./routes/image');
 const comment = require('./routes/comment');
-const picture = require('./routes/picture');
+const gallery = require('./routes/gallery');
 const voting = require('./routes/voting');
 // Globale Variablen
 var config = require('../databaseconfig.json');
@@ -80,7 +80,7 @@ app.use('/party/comment', comment);
 app.use('/party/vote', voting);
 app.use('/party', parties);
 app.use('/comment', comment);
-app.use('/picture',picture);
+app.use('/gallery',gallery);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next({status: 404, message: 'Not Found'});

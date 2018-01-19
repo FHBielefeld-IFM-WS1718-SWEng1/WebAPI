@@ -4,7 +4,7 @@ const util = require('../helper/utilities');
 
 router.get('/:id', function (req, res, next){
     if(util.hasKey(req.params,"id")){
-        req.models.Picture.findById(req.params.id).then(picture=>{
+        req.models.Gallery.findById(req.params.id).then(picture=>{
             if(picture){
                 res.status(200);
                 res.json(picture);
@@ -20,7 +20,7 @@ router.get('/:id', function (req, res, next){
 
 router.put('/:id', function (req, res, next){
     if(util.hasKey(req.params,"id")){
-        req.models.Picture.findById(req.params.id).then(picture=>{
+        req.models.Gallery.findById(req.params.id).then(picture=>{
             if(picture){
                 util.changeValueIfExists(picture, req.body, "text");
                 util.changeValueIfExists(picture, req.body, "file");
@@ -40,7 +40,7 @@ router.put('/:id', function (req, res, next){
 
 router.delete('/:id', function (req, res, next){
     if(util.hasKey(req.params,"id")){
-        req.models.Picture.findById(req.params.id).then(picture=>{
+        req.models.Gallery.findById(req.params.id).then(picture=>{
             if(picture){
                 picture.destroy().then(r=> picture.save().then(result=>{
                     res.status(200);
@@ -57,7 +57,7 @@ router.delete('/:id', function (req, res, next){
 
 router.post('/', function(req, res, next){
     if(util.hasKey(req.body,"user_id") && util.hasKey(req.body,"party_id")){
-        req.models.Picture.create({
+        req.models.Gallery.create({
             text:req.body.text,
             file:req.body.file,
             user_id:req.body.user_id,
