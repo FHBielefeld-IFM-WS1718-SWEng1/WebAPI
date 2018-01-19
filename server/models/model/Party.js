@@ -6,6 +6,7 @@ module.exports = (function (sequelize, Sequelize) {
         startDate: {type: Sequelize.DATE, field: 'StartDate'},
         endDate: {type: Sequelize.DATE, field: 'EndDate'},
         location: {type: Sequelize.STRING(100), field: 'Location'},
+        picture: {type: Sequelize.STRING(100), field: 'Picture'},
         createdAt: {type: Sequelize.DATE, field: 'CreatedAt'},
         updatedAt: {type: Sequelize.DATE, field: 'ChangedAt'},
         deletedAt: {type: Sequelize.DATE, field: 'DeletedAt'},
