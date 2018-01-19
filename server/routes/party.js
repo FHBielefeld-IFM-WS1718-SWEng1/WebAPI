@@ -13,6 +13,7 @@ router.post('/', function (req, res, next) {
         entry.startDate = req.body.startDate;
         entry.location = req.body.location;
         entry.user_id = req.userid;
+        entry.description = req.description;
 
         req.models.Party.create(entry)
             .then(result => {
