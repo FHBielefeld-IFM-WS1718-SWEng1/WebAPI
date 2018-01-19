@@ -43,10 +43,10 @@ router.put('/', (req, res, next) => {
             if (result) {
                 result.status = req.body.status;
                 result.save()
-                    .then(result => next({
-                        status: 200,
-                        message: "Es wurde der status der einladung erfolgreich abgeändert!"
-                    }))
+                    .then(result => {res.status: 200,
+                        res.json = {
+                            message: "Es wurde der status der einladung erfolgreich abgeändert!"
+                        }})
                     .catch(err => next(err));
             } else {
                 next({status: 400, message: "es wurde keine Einladung gefunden von dem User zu der Party!"})
