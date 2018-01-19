@@ -17,6 +17,7 @@ router.put('/:id', function (req, res, next) {
                     }
                     util.changeValueIfExists(result,req.body,"password");
                     util.changeValueIfExists(result, req.body, "birthdate");
+                    util.changeValueIfExists(result, req,body, "profilePicture");
                     result.save().then(result => {
                         res.status(200);
                         res.json(result);
