@@ -4,7 +4,7 @@ const util = require('../helper/utilities');
 
 
 router.post('/', (req, res, next) => {
-    req.models.create({
+    req.models.Task.create({
         user_id: req.body.user_id,
         party_id: req.body.party_id,
         text: req.body.text,
