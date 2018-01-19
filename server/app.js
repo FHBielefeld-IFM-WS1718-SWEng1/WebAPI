@@ -16,6 +16,7 @@ const tasklist = require('./routes/tasklist');
 const rating = require('./routes/rating');
 const image = require('./routes/image');
 const comment = require('./routes/comment');
+const picture = require('./routes/picture');
 // Globale Variablen
 var config = require('../databaseconfig.json');
 // Helper Funktionen
@@ -76,6 +77,7 @@ app.use('/party/todo', todolist);
 app.use('/party/task', tasklist);
 app.use('/party', parties);
 app.use('/comment', comment);
+app.use('/picture',picture);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next({status: 404, message: 'Not Found'});
