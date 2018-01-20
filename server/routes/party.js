@@ -146,7 +146,7 @@ router.get('/:id', function (req, res, next) {
                         util.removeTimeStamp(value.dataValues);
                         util.removeKeysFromUser(value.User.dataValues);
                         retval.ratings.push(value.dataValues);
-                        ratingAverage += value.dataValues.value;
+                        retval.ratingAverage += value.dataValues.value;
                     });
                     retval.ratingAverage /= retval.ratings.length;
                     result.comments = [];
