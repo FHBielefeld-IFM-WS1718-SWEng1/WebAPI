@@ -14,8 +14,8 @@ router.post('/', function (req, res, next) {
         entry.location = req.body.location;
         entry.user_id = req.userid;
         entry.description = req.description;
-        util.changeValueIfExists(entry, req, "picture");
-        util.changeValueIfExists(entry, req, "endDate");
+        util.changeValueIfExists(entry, req.body, "picture");
+        util.changeValueIfExists(entry, req.body, "endDate");
 
         req.models.Party.create(entry)
             .then(result => {
@@ -243,6 +243,7 @@ router.put('/:id', function (req, res, next) {
                     util.changeValueIfExists(result, req.body, "startDate");
                     util.changeValueIfExists(result, req.body, "endDate");
                     util.changeValueIfExists(result, req.body, "location");
+                    util.changeValueIfExists(result, req.body, "picture");
                     result.save().then(result => {
                         res.status(200);
                         res.json(result)
