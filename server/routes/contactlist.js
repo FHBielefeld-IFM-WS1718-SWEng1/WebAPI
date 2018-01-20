@@ -119,7 +119,7 @@ router.delete('/', (req, res, next) => {
                             }, {
                                 user_id2:
                                     {
-                                        $eq: req.body.id
+                                        $eq: req.body.userid
                                     }
                             }]
                         },

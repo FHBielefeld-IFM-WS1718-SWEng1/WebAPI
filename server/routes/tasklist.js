@@ -11,8 +11,16 @@ router.post('/', (req, res, next) => {
         status: req.body.status
     }).then(value => {
         if (value) {
-            res.status(200);
-            res.json(value);
+            req.models.User.findById(req.body.user_id).then(value2 => {
+                res.status(200);
+                let model = value.dataValues;
+                model.user = {};
+                model.user.id = value2.id;
+                model.user.name = value2.name;
+                res.json(model);
+            }).catch(err => {
+                next(err)
+            });
         } else {
             next({status: 400, message: "Kein Datensatz wurde angelegt"});
         }
@@ -36,7 +44,7 @@ router.put('/', (req, res, next) => {
 });
 
 router.delete('/', (req, res, next) => {
-    req.models.Task.destroy({where: {userid: req.body.id}}).then(value => {
+    req.models.Task.destroy({where: {user_id: req.body.id}}).then(value => {
         if (value) {
             res.status(200);
             res.json(value);
