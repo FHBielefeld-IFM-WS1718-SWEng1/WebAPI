@@ -243,6 +243,7 @@ router.put('/:id', function (req, res, next) {
                     util.changeValueIfExists(result, req.body, "startDate");
                     util.changeValueIfExists(result, req.body, "endDate");
                     util.changeValueIfExists(result, req.body, "location");
+                    util.changeValueIfExists(result, req.body, "picture");
                     result.save().then(result => {
                         res.status(200);
                         res.json(result)
