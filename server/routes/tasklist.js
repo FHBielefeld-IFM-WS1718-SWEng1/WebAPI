@@ -36,7 +36,7 @@ router.put('/', (req, res, next) => {
 });
 
 router.delete('/', (req, res, next) => {
-    req.models.Task.destroy({where: {userid: req.body.id}}).then(value => {
+    req.models.Task.destroy({where: {user_id: req.body.id}}).then(value => {
         if (value) {
             res.status(200);
             res.json(value);
