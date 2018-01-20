@@ -121,7 +121,7 @@ router.get('/:id', function (req, res, next) {
                     retval.endDate = result.endDate;
                     retval.ersteller = result.User;
                     retval.location = result.location;
-                    retval.pictrue = result.picture;
+                    retval.picture = result.picture;
                     util.removeKeysFromUser(retval.ersteller);
                     retval.tasks = [];
                     result.Tasks.forEach((value) => {
