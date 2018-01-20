@@ -37,7 +37,6 @@ router.get('/', function (req, res, next) {
     // somit müssen wir den User finden dem der APIKey gehört
     let creator = true;
     let guest = true;
-    console.log(req.query);
     if (util.hasKey(req.query, 'creator')) {
         creator = req.query.creator === 'true';
     }
@@ -50,13 +49,17 @@ router.get('/', function (req, res, next) {
     } else {
         let includes = [];
         if (creator === true) {
-            includes.push(req.models.Party);
+            includes.push({
+                model: req.models.Party,
+                include: req.models.User
+            });
         }
         if (guest === true) {
             includes.push({
-                model: req.models.Guestlist, include: [
-                    req.models.Party
-                ]
+                model: req.models.Guestlist, include: [{
+                    model: req.models.Party,
+                    include: req.models.User
+                }]
             });
         }
         req.models.User.findById(req.userid, {
@@ -64,15 +67,43 @@ router.get('/', function (req, res, next) {
         }).then((user) => {
             let parties = [];
             if (creator === true) {
-                user.Parties.forEach((value, key) => {
-                    value.dataValues.ersteller = true;
-                    parties.push(value.dataValues);
+                user.Parties.forEach((value) => {
+                    let entity = {};
+                    entity.ersteller = true;
+                    entity.id = value.id;
+                    entity.name = value.name;
+                    entity.description = value.description;
+                    entity.startDate = value.startDate;
+                    entity.endDate = value.endDate;
+                    entity.location = value.location;
+                    entity.picture = value.picture;
+                    entity.user = {};
+                    entity.user.id = value.User.id;
+                    entity.user.email = value.User.email;
+                    entity.user.name = value.User.name;
+                    entity.user.profilepicture = value.User.profilepicture;
+
+                    parties.push(entity);
                 });
             }
             if (guest === true) {
                 user.Guestlists.forEach((value) => {
-                    value.dataValues.Party.ersteller = false;
-                    parties.push(value.dataValues.Party);
+                    let entity = {};
+                    entity.ersteller = true;
+                    entity.id = value.Party.id;
+                    entity.name = value.Party.name;
+                    entity.description = value.Party.description;
+                    entity.startDate = value.Party.startDate;
+                    entity.endDate = value.Party.endDate;
+                    entity.location = value.Party.location;
+                    entity.picture = value.Party.picture;
+                    entity.user = {};
+                    entity.user.id = value.Party.User.id;
+                    entity.user.email = value.Party.User.email;
+                    entity.user.name = value.Party.User.name;
+                    entity.user.profilepicture = value.Party.User.profilepicture;
+                    entity.ersteller = false;
+                    parties.push(entity);
                 });
             }
 
