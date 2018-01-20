@@ -14,8 +14,8 @@ router.post('/', function (req, res, next) {
         entry.location = req.body.location;
         entry.user_id = req.userid;
         entry.description = req.description;
-        util.changeValueIfExists(entry, req, "picture");
-        util.changeValueIfExists(entry, req, "endDate");
+        util.changeValueIfExists(entry, req.body, "picture");
+        util.changeValueIfExists(entry, req.body, "endDate");
 
         req.models.Party.create(entry)
             .then(result => {
