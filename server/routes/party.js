@@ -142,6 +142,9 @@ router.get('/:id', function (req, res, next) {
                         include: req.models.User
                     }
                 }
+            }, {
+                model: req.models.Gallery,
+                include: req.models.User
             }]
         })
             .then((result) => {
@@ -219,7 +222,17 @@ router.get('/:id', function (req, res, next) {
                         }
                         retval.votings.push(vote);
                     });
-
+                    retval.gallery = [];
+                    result.Pictures.forEach(value=>{
+                        let eintrag = {};
+                        eintrag.uploader = {};
+                        eintrag.uploader.id = value.User.id;
+                        eintrag.uploader.name = value.User.name;
+                        eintrag.id = value.id;
+                        eintrag.text = value.text;
+                        eintrag.file = value.file;
+                        retval.gallery.push(eintrag);
+                    });
 
                     res.status(200);
                     res.json(retval);

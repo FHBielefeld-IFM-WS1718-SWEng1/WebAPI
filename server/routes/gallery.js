@@ -56,11 +56,11 @@ router.delete('/:id', function (req, res, next){
 });
 
 router.post('/', function(req, res, next){
-    if(util.hasKey(req.body,"user_id") && util.hasKey(req.body,"party_id")){
+    if(util.hasKey(req.body,"text") && util.hasKey(req.body, "file") && util.hasKey(req.body,"party_id")){
         req.models.Gallery.create({
             text:req.body.text,
             file:req.body.file,
-            user_id:req.body.user_id,
+            user_id:req.userid,
             party_id:req.body.party_id
         }).then(result=>{
             res.status(200);
