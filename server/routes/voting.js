@@ -30,7 +30,7 @@ router.post('/choice', (req, res, next) => {
 router.post('/choice/vote', (req, res, next) => {
     if (util.hasKey(req.body, 'choice_id')) {
         let elem = {choice_id: req.body.choice_id, user_id: req.userid};
-        req.models.Choice.create(elem).then((result) => {
+        req.models.UserChoice.create(elem).then((result) => {
             res.status(203);
             res.json(result);
         }).catch(err => next(err));
