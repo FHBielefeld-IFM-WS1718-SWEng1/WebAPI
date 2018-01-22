@@ -4,8 +4,8 @@ const util = require('../helper/utilities');
 
 /*  */
 router.post('/', (req, res, next) => {
-    if (util.hasKey(req.body, 'abstimmungsname') && util.hasKey(req.body, 'party_id')) {
-        let elem = {abstimmungsname: req.body.abstimmungsname, user_id: req.userid, party_id: req.body.party_id};
+    if (util.hasKey(req.body, 'name') && util.hasKey(req.body, 'party_id')) {
+        let elem = {name: req.body.name, user_id: req.userid, party_id: req.body.party_id};
         req.models.Voting.create(elem).then((result) => {
             res.status(203);
             res.json(result);
