@@ -185,7 +185,7 @@ router.get('/:id', function (req, res, next) {
                         retval.ratingAverage += value.dataValues.value;
                     });
                     retval.ratingAverage /= retval.ratings.length;
-                    result.comments = [];
+                    retval.comments = [];
                     result.Comments.forEach((value) => {
                         util.removeTimeStamp(value.dataValues);
                         util.removeKeysFromUser(value.User.dataValues);
@@ -205,7 +205,6 @@ router.get('/:id', function (req, res, next) {
                                 choice.userChoices = [];
                                 choice.votes = 0;
                                 if (util.hasKey(value, 'UserChoices')) {
-                                    console.log(value);
                                     value.UserChoices.forEach(value => {
                                         choice.votes++;
                                         let userChoice = {};
