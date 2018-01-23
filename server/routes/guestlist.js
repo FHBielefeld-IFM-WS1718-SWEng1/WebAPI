@@ -23,12 +23,18 @@ router.post('/', (req, res, next) => {
             } else {
                 req.models.Guestlist.create({party_id: req.body.partyid, user_id: req.body.userid})
                     .then(result => {
-                        if (result) {
-                            res.status(203);
-                            res.json({message: "User wurde eingeladen!"});
-                        } else {
-                            next({status: 400, message: "User wurde nicht eingeladen"});
-                        }
+                        req.models.User.findById(req.body.userid).then(result2 => {
+                            if (result2 && result) {
+                                let daten = result.dataValues;
+                                daten.user = {};
+                                daten.user.id = result2.id;
+                                daten.user.name = result2.name;
+                                res.status(203);
+                                res.json(daten);
+                            } else {
+                                next({status: 400, message: "User wurde nicht eingeladen"});
+                            }
+                        }).catch(err => next(err));
                     }).catch(err => next(err));
             }
         }).catch(err => next(err));
