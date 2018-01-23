@@ -21,14 +21,14 @@ router.post('/', (req, res, next) => {
             if (result) {
                 next({status: 400, message: "Der User ist bereits zu der PArty eingeladen!"});
             } else {
-                req.models.Guestlist.create({party_id: req.body.partyid, user_id: req.body.userid})
+                req.models.Guestlist.create({party_id: req.body.partyid, user_id: req.body.userid, status:0})
                     .then(result => {
                         req.models.User.findById(req.body.userid).then(result2 => {
                             if (result2 && result) {
                                 let daten = result.dataValues;
-                                daten.user = {};
-                                daten.user.id = result2.id;
-                                daten.user.name = result2.name;
+                                daten.User = {};
+                                daten.User.id = result2.id;
+                                daten.User.name = result2.name;
                                 res.status(203);
                                 res.json(daten);
                             } else {
