@@ -187,9 +187,15 @@ router.get('/:id', function (req, res, next) {
                     retval.ratingAverage /= retval.ratings.length;
                     retval.comments = [];
                     result.Comments.forEach((value) => {
-                        util.removeTimeStamp(value.dataValues);
-                        util.removeKeysFromUser(value.User.dataValues);
-                        retval.comments.push(value.dataValues);
+                        let entry = {};
+                        entry.id = value.id;
+                        entry.text = value.text;
+                        entry.User = {};
+                        if(util.hasKey(value, 'User')){
+                            entry.User.id = value.User.id;
+                            entry.User.name = value.User.name;
+                        }
+                        retval.comments.push(entry);
                     });
                     retval.votings = [];
                     result.Votings.forEach((value) => {
