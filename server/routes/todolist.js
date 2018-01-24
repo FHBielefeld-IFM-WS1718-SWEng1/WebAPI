@@ -24,6 +24,7 @@ router.put('/:id', (req, res, next) => {
         .then(value => {
             util.changeValueIfExists(value, req.body, 'text');
             util.changeValueIfExists(value, req.body, 'status');
+            util.changeValueIfExists(value, req.body, 'user_id');
             value.save().then(value2 => {
                 if (value2) {
                     res.status(200);
