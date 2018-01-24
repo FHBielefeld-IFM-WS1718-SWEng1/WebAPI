@@ -132,7 +132,12 @@ router.get('/:id', function (req, res, next) {
                 include: req.models.User
             }, {
                 model: req.models.Comment,
-                include: req.models.Answer
+                include: [{
+                    model: req.models.Answer,
+                    include: req.models.User
+                }, {
+                    model: req.models.User
+                }]
             }, {
                 model: req.models.Voting,
                 include: {
@@ -191,9 +196,20 @@ router.get('/:id', function (req, res, next) {
                         entry.id = value.id;
                         entry.text = value.text;
                         entry.User = {};
-                        if(util.hasKey(value, 'User')){
+                        if (util.hasKey(value, 'User')) {
                             entry.User.id = value.User.id;
                             entry.User.name = value.User.name;
+                        }
+                        entry.Answers = [];
+                        if (util.hasKey(value, 'Answer')) {
+                            value.Answers.forEach(value2 => {
+                                let temp = {};
+                                temp.id = value2.id;
+                                temp.text = value2.text;
+                                temp.User = {};
+                                temp.User.id = value2.User.id;
+                                temp.User.name = value2.User.name;
+                            });
                         }
                         retval.comments.push(entry);
                     });
@@ -228,7 +244,7 @@ router.get('/:id', function (req, res, next) {
                         retval.votings.push(vote);
                     });
                     retval.gallery = [];
-                    result.Pictures.forEach(value=>{
+                    result.Pictures.forEach(value => {
                         let eintrag = {};
                         eintrag.uploader = {};
                         eintrag.uploader.id = value.User.id;

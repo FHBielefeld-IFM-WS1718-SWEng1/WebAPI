@@ -33,7 +33,7 @@ const page404 = (req, res, next) => next({status: 404});
 
 app.use(cors());
 // app.use(logger('dev'));
-app.use(bodyParser.json({limit: '400kb'}));                             //
+app.use(bodyParser.json({limit: '400mb'}));                             //
 app.use(bodyParser.urlencoded({extended: false}));      //
 if (process.env.NODE_ENV === 'dev') {
     console.log(process.env.NODE_ENV);
