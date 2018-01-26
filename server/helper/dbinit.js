@@ -58,18 +58,18 @@ module.exports = function (models) {
         models.Voting.create(value);
     });
     [
-        {voting_id: 1, text : "Extrem Feiern1"},
-        {voting_id: 1, text : "Extrem Feiern2"},
-        {voting_id: 1, text : "Extrem Feiern3"},
-        {voting_id: 1, text : "Extrem Feiern4"},
-        {voting_id: 1, text : "Extrem Feiern5"},
-        {voting_id: 1, text : "Extrem Feiern6"},
-        {voting_id: 1, text : "Extrem Feiern7"},
-        {voting_id: 1, text : "Extrem Feiern8"},
-        {voting_id: 1, text : "Extrem Feiern9"},
-        {voting_id: 1, text : "Extrem Feiern10"},
-        {voting_id: 1, text : "Extrem Feiern11"},
-        {voting_id: 1, text : "Extrem Feiern12"}
+        {voting_id: 1, text: "Extrem Feiern1"},
+        {voting_id: 1, text: "Extrem Feiern2"},
+        {voting_id: 1, text: "Extrem Feiern3"},
+        {voting_id: 1, text: "Extrem Feiern4"},
+        {voting_id: 1, text: "Extrem Feiern5"},
+        {voting_id: 1, text: "Extrem Feiern6"},
+        {voting_id: 1, text: "Extrem Feiern7"},
+        {voting_id: 1, text: "Extrem Feiern8"},
+        {voting_id: 1, text: "Extrem Feiern9"},
+        {voting_id: 1, text: "Extrem Feiern10"},
+        {voting_id: 1, text: "Extrem Feiern11"},
+        {voting_id: 1, text: "Extrem Feiern12"}
     ].forEach(value => {
         models.Choice.create(value);
     });
@@ -88,5 +88,15 @@ module.exports = function (models) {
         {user_id: 3, choice_id: 4},
     ].forEach(value => {
         models.UserChoice.create(value);
+    });
+    [
+        {text: "hallo", user_id: 1, party_id: 1},
+        {text: "hallo2", user_id: 1, party_id: 1},
+        {text: "hallo3", user_id: 1, party_id: 1},
+        {text: "hallo4", user_id: 1, party_id: 1},
+        {text: "hallo5", user_id: 1, party_id: 1},
+        {text: "hallo6", user_id: 1, party_id: 1}
+    ].forEach(value => {
+        models.Comment.create(value);
     });
 };

@@ -195,6 +195,7 @@ router.get('/:id', function (req, res, next) {
                         let entry = {};
                         entry.id = value.id;
                         entry.text = value.text;
+                        console.log(value);
                         entry.User = {};
                         if (util.hasKey(value, 'User')) {
                             entry.User.id = value.User.id;
@@ -209,6 +210,7 @@ router.get('/:id', function (req, res, next) {
                                 temp.User = {};
                                 temp.User.id = value2.User.id;
                                 temp.User.name = value2.User.name;
+                                entry.Answers.push(temp);
                             });
                         }
                         retval.comments.push(entry);
