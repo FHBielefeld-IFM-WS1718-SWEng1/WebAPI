@@ -13,7 +13,7 @@ router.post('/', function (req, res, next) {
         entry.startDate = req.body.startDate;
         entry.location = req.body.location;
         entry.user_id = req.userid;
-        entry.description = req.description;
+        entry.description = req.body.description;
         util.changeValueIfExists(entry, req.body, "picture");
         util.changeValueIfExists(entry, req.body, "endDate");
 
