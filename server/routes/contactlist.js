@@ -37,7 +37,6 @@ router.get('/', (req, res, next) => {
     }).then((result) => {
         let ret = {count: 0, contacts: []};
         if (result) {
-
             result.forEach(val => {
                 delete val.User.dataValues.password;
                 delete val.User.dataValues.createdAt;
@@ -57,37 +56,19 @@ router.get('/', (req, res, next) => {
 router.put('/', (req, res, next) => {
     if (util.hasKey(req.body, 'userid')) {
         req.models.Contactlist.find({
-            where: {
-                $or: [
-                    {
-                        $and: [{
-                            user_id1:
-                                {
-                                    $eq: req.userid
-                                }
-                        }, {
-                            user_id2:
-                                {
-                                    $eq: req.body.userid
-                                }
-                        }]
-                    },
-                    {
-                        $and: [{
-                            user_id1:
-                                {
-                                    $eq: req.body.userid
-                                }
-                        }, {
-                            user_id2:
-                                {
-                                    $eq: req.userid
-                                }
-                        }]
-                    }
-                ]
+                where: {
+                    $or: [{
+                        user_id1: {
+                            $eq: req.userid
+                        }
+                    }, {
+                        user_id2: {
+                            $eq: req.body.userid
+                        }
+                    }]
+                }
             }
-        }).then(result => {
+        ).then(result => {
             if (result) {
                 util.changeValueIfExists(result, req.body, 'status');
                 result.save().then((res2) => {
@@ -102,41 +83,16 @@ router.put('/', (req, res, next) => {
         next({status: 400, message: "Keine userid übergeben!"})
     }
 
-});
+})
+;
 
 router.delete('/', (req, res, next) => {
     if (util.hasKey(req.body, 'userid')) {
-     req.models.Contactlist.destroy({
+        req.models.Contactlist.destroy({
             where:
                 {
-                    $or: [
-                        {
-                            $and: [{
-                                user_id1:
-                                    {
-                                        $eq: req.userid
-                                    }
-                            }, {
-                                user_id2:
-                                    {
-                                        $eq: req.body.userid
-                                    }
-                            }]
-                        },
-                        {
-                            $and: [{
-                                user_id1:
-                                    {
-                                        $eq: req.body.userid
-                                    }
-                            }, {
-                                user_id2:
-                                    {
-                                        $eq: req.userid
-                                    }
-                            }]
-                        }
-                    ]
+                    user_id1: req.userid
+                    , user_id2: req.body.userid
                 },
             include: {
                 model: req.models.User
