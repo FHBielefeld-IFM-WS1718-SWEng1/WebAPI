@@ -16,21 +16,7 @@ router.post('/', (req, res, next) => {
 router.get('/', (req, res, next) => {
     req.models.Contactlist.findAll({
         where:
-            {
-                $or: [
-                    {
-                        user_id1:
-                            {
-                                $eq: req.userid
-                            }
-                    },
-                    {
-                        user_id2:
-                            {
-                                $eq: req.userid
-                            }
-                    }]
-            },
+            {user_id1: req.userid},
         include: {
             model: req.models.User
         }
