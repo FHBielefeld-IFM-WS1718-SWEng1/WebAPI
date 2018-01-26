@@ -38,6 +38,9 @@ router.put('/', (req, res, next) => {
         .then(value => {
             util.changeValueIfExists(value, req.body, 'text');
             util.changeValueIfExists(value, req.body, 'status');
+            if(util.hasKey(req.body, 'userid')){
+                value.user_id = req.body.userid;
+            }
             value.save().then(value2 => {
                 if (value2) {
                     res.status(200);

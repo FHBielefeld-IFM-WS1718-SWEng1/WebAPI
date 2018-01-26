@@ -167,7 +167,11 @@ router.get('/:id', function (req, res, next) {
                     retval.tasks = [];
                     result.Tasks.forEach((value) => {
                         util.removeTimeStamp(value.dataValues);
-                        util.removeKeysFromUser(value.dataValues.User.dataValues);
+                        if (util.hasKey(value, 'User')) {
+                            util.removeKeysFromUser(value.dataValues.User.dataValues);
+                        } else {
+                            value.dataValues.User = null;
+                        }
                         retval.tasks.push(value.dataValues);
                     });
                     retval.todo = [];
